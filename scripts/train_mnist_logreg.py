@@ -12,7 +12,7 @@ import tensorflow as tf
 from influence.logisticRegressionWithLBFGS import LogisticRegressionWithLBFGS
 import influence.experiments as experiments
 
-from load_mnist import load_mnist, load_small_mnist
+from scripts.load_mnist import load_mnist, load_small_mnist
 
 
 

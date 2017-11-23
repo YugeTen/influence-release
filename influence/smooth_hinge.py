@@ -156,7 +156,7 @@ class SmoothHinge(GenericNeuralNet):
         #     self.update_learning_rate_op, 
         #     feed_dict={self.learning_rate_placeholder: 1 * self.initial_learning_rate})        
 
-        # for step in xrange(num_steps):   
+        # for step in range(num_steps):   
         #     self.sess.run(self.train_op, feed_dict=feed_dict)
         if self.temp == 0:
             self.train_with_svm(feed_dict, save_checkpoints=False, verbose=False)
@@ -252,7 +252,7 @@ class SmoothHinge(GenericNeuralNet):
             print('Using model minus one')
             model = self.svm_model_minus_one
         else:
-            raise ValueError, "feed_dict has incorrect number of training examples"
+            raise ValueError("feed_dict has incorrect number of training examples")
 
         model.fit(X_train, Y_train)
         # sklearn returns coefficients in shape num_classes x num_features
@@ -274,7 +274,7 @@ class SmoothHinge(GenericNeuralNet):
             self.print_model_eval()
 
         # print('Starting SGD')
-        # for step in xrange(100):   
+        # for step in range(100):   
         #     self.sess.run(self.train_op, feed_dict=feed_dict)
 
         # self.print_model_eval()

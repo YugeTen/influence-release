@@ -10,7 +10,7 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets import base
 
-from load_mnist import load_mnist
+from scripts.load_mnist import load_mnist
 
 from influence.binaryLogisticRegressionWithLBFGS import BinaryLogisticRegressionWithLBFGS
 import influence.dataset as dataset

@@ -15,7 +15,7 @@ import sklearn
 import influence.experiments as experiments
 from influence.nlprocessor import NLProcessor
 from influence.binaryLogisticRegressionWithLBFGS import BinaryLogisticRegressionWithLBFGS
-from load_spam import load_spam
+from scripts.load_spam import load_spam
 
 import tensorflow as tf
 

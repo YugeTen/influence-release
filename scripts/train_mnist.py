@@ -11,7 +11,7 @@ import tensorflow as tf
 import influence.experiments as experiments
 from influence.all_CNN_c import All_CNN_C
 
-from load_mnist import load_small_mnist, load_mnist
+from scripts.load_mnist import load_small_mnist, load_mnist
 
 
 

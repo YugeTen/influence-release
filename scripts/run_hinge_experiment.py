@@ -8,7 +8,7 @@ import pandas as pd
 import tensorflow as tf
  
 from scipy.stats import pearsonr
-from load_mnist import load_mnist
+from scripts.load_mnist import load_mnist
 
 import influence.experiments as experiments
 import influence.dataset as dataset
