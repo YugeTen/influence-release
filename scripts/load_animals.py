@@ -63,7 +63,7 @@ def load_animals(num_train_ex_per_class=300,
     if num_valid_ex_per_class == 0:
         valid_str = ''
     else:
-        valid_str = '_valid-%s' % num_valid_examples
+        valid_str = '_valid-%s' % num_valid_ex_per_class
 
     if classes is None:
         classes = ['dog', 'cat', 'bird', 'fish', 'horse', 'monkey', 'zebra', 'panda', 'lemur', 'wombat']
