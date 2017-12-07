@@ -310,15 +310,21 @@ class GenericNeuralNet(object):
                 [self.loss_no_reg, self.accuracy_op], 
                 feed_dict=self.all_test_feed_dict)
 
-        print('Train loss (w reg) on all data: %s' % loss_val)
-        print('Train loss (w/o reg) on all data: %s' % loss_no_reg_val)
 
-        print('Test loss (w/o reg) on all data: %s' % test_loss_val)
-        print('Train acc on all data:  %s' % train_acc_val)
-        print('Test acc on all data:   %s' % test_acc_val)
+        print('All values are taken average among all data')
+        print('Train loss (with regression): %s' % loss_val)
+        print('Train loss (without regression): %s' % loss_no_reg_val)
+        print('Test loss (without regression): %s' % test_loss_val)
 
-        print('Norm of the mean of gradients: %s' % np.linalg.norm(np.concatenate(grad_loss_val)))
-        print('Norm of the params: %s' % np.linalg.norm(np.concatenate(params_val)))
+        print()
+
+        print('Train accuracy:  %s' % train_acc_val)
+        print('Test accuracy: %s' % test_acc_val)
+
+        print()
+
+        print('Norm of the mean of gradients (loss to parameters): %s' % np.linalg.norm(np.concatenate(grad_loss_val)))
+        print('Norm of the parameters: %s' % np.linalg.norm(np.concatenate(params_val)))
 
 
 
