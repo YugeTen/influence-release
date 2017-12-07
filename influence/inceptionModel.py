@@ -155,20 +155,28 @@ class BinaryInceptionModel(GenericNeuralNet):
         #                         TF_WEIGHTS_PATH_NO_TOP,
         #                         cache_subdir='models',
         #                         md5_hash='bcbd6486424b2319ff4ef7d526e38f63')
-        weights_path = 'inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
+        weights_path = '/home/shi144/influence-release/inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
         self.inception_model.load_weights(weights_path)
 
 
     def inference(self, input):        
         reshaped_input = tf.reshape(input, [-1, self.img_side, self.img_side, self.num_channels])
-        self.inception_model = InceptionV3(include_top=False, weights='imagenet', input_tensor=reshaped_input)
-        
+        self.inception_model = InceptionV3(include_top=False,
+                                           weights='imagenet',
+                                           input_tensor=reshaped_input,
+                                           input_shape=(224,224,3))
+
         raw_inception_features = self.inception_model.output
 
-        pooled_inception_features = AveragePooling2D((8, 8), strides=(8, 8), name='avg_pool')(raw_inception_features)
-        self.inception_features = Flatten(name='flatten')(pooled_inception_features)
-
-
+        self.inception_features = Flatten(name='flatten')(raw_inception_features)
+        print(self.inception_features.shape)
+        # self.inception_model = InceptionV3(include_top=False,
+        #                                    weights='imagenet',
+        #                                    input_tensor=reshaped_input,
+        #                                    input_shape=(224, 224, 3))
+        #
+        # self.inception_features = self.inception_model.output
+        #print (self.inception_features.shape)
         with tf.variable_scope('softmax_linear'):
             weights = variable_with_weight_decay(
                 'weights', 

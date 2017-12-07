@@ -154,7 +154,8 @@ def InceptionV3(include_top=True,
         default_size=299,
         min_size=139,
         data_format=K.image_data_format(),
-        include_top=include_top)
+        require_flatten=include_top
+    )
 
     if input_tensor is None:
         img_input = Input(shape=input_shape)
@@ -383,7 +384,7 @@ def InceptionV3(include_top=True,
             #     WEIGHTS_PATH_NO_TOP,
             #     cache_subdir='models',
             #     md5_hash='bcbd6486424b2319ff4ef7d526e38f63')
-            weights_path = 'inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
+            weights_path = '/home/shi144/influence-release/inception/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
         model.load_weights(weights_path)
         if K.backend() == 'theano':

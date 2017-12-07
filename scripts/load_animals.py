@@ -158,7 +158,9 @@ def load_animals(num_train_ex_per_class=300,
 
 
     train = DataSet(X_train, Y_train)
-    if (X_valid is not None) and (Y_valid is not None):
+    if X_valid and Y_valid:
+        print (X_valid)
+        print (Y_valid)
         validation = DataSet(X_valid, Y_valid)
     else:
         validation = None
