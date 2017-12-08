@@ -434,15 +434,23 @@ class GenericNeuralNet(object):
 
 
     def loss(self, logits, labels):
-
+        """
+        Args:
+          logits: Logits tensor, float - [batch_size, NUM_CLASSES].
+          labels: Labels tensor, int32 - [batch_size], with values in the
+            range [0, NUM_CLASSES).
+        """
         labels = tf.one_hot(labels, depth=self.num_classes)
-        # correct_prob = tf.reduce_sum(tf.multiply(labels, tf.nn.softmax(logits)), reduction_indices=1)
-        cross_entropy = - tf.reduce_sum(tf.multiply(labels, tf.nn.log_softmax(logits)), reduction_indices=1)
-
+        cross_entropy = - tf.reduce_sum(tf.multiply(labels, tf.nn.log_softmax(logits)),
+                                        reduction_indices=1)
+        # losses of single instances
         indiv_loss_no_reg = cross_entropy
+
+        # loss of the entire batch
         loss_no_reg = tf.reduce_mean(cross_entropy, name='xentropy_mean')
         tf.add_to_collection('losses', loss_no_reg)
 
+        # loss of all training so far
         total_loss = tf.add_n(tf.get_collection('losses'), name='total_loss')
 
         return total_loss, loss_no_reg, indiv_loss_no_reg
@@ -455,21 +463,41 @@ class GenericNeuralNet(object):
         labels = tf.one_hot(labels, depth=self.num_classes)        
         wrong_labels = (labels - 1) * -1 # Flips 0s and 1s
         wrong_labels_bool = tf.reshape(tf.cast(wrong_labels, tf.bool), [-1, self.num_classes])
+        wrong_logits = tf.reshape(tf.boolean_mask(logits, wrong_labels_bool),
+                                  [-1, self.num_classes - 1])
+        # boolean_mask:
+        #
+        #   tensor = [0, 1, 2, 3]
+        #   mask = np.array([True, False, True, False])
+        #   boolean_mask(tensor, mask)  # [0, 2]
 
-        wrong_logits = tf.reshape(tf.boolean_mask(logits, wrong_labels_bool), [-1, self.num_classes - 1])
-        
-        indiv_adversarial_loss = tf.reduce_logsumexp(wrong_logits, reduction_indices=1) - tf.reduce_logsumexp(logits, reduction_indices=1)
+        indiv_adversarial_loss = tf.reduce_logsumexp(wrong_logits, reduction_indices=1) - \
+                                 tf.reduce_logsumexp(logits, reduction_indices=1)
+        # reduce_logsumexp: log(sum(exp(x)))
+        #
+        #   a = tf.constant([[0,0,0],
+        #                    [0,0,0]])
+        #   a.shape() = (2,3)
+        #   tf.reduce_logsumexp(a, reduction_indices=1) --> [log(3), log(3)]
+        #   tf.reduce_logsumexp(a)                      --> log(6)
         adversarial_loss = tf.reduce_mean(indiv_adversarial_loss)
         
         return adversarial_loss, indiv_adversarial_loss #, indiv_wrong_prob
 
 
     def update_feed_dict_with_v_placeholder(self, feed_dict, vec):
+        # recall v_placeholder is a placeholder of type tf.float32 and shape of each
+        # set of parameters.
+        #
+        # for now we assume that feed_dict has a slot for each of these sets of parameters
+        # and vec are their "new" values we want to assign to the feed_dict.
         for pl_block, vec_block in zip(self.v_placeholder, vec):
             feed_dict[pl_block] = vec_block        
         return feed_dict
 
 
+
+################################################ HVP ################################################
     def get_inverse_hvp(self, v, approx_type='cg', approx_params=None, verbose=True):
         assert approx_type in ['cg', 'lissa']
         if approx_type == 'lissa':
@@ -481,41 +509,40 @@ class GenericNeuralNet(object):
     def get_inverse_hvp_lissa(self, v, 
                               batch_size=None,
                               scale=10, damping=0.0, num_samples=1, recursion_depth=10000):
-        """
-        This uses mini-batching; uncomment code for the single sample case.
-        """    
+
         inverse_hvp = None
         print_iter = recursion_depth / 10
 
+        # for each sample(t) we want to investigate, do recursion update for r times.
+        # note that rt = O(n), where n is the total number of training points
         for i in range(num_samples):
-            # samples = np.random.choice(self.num_train_examples, size=recursion_depth)
-           
-            cur_estimate = v
-
+            current_estimate = v
             for j in range(recursion_depth):
-             
-                # feed_dict = fill_feed_dict_with_one_ex(
-                #   data_set, 
-                #   images_placeholder, 
-                #   labels_placeholder, 
-                #   samples[j])   
+                # prepare for hessian vector evaluation by populating feed_dict with
+                # training data of this batch and the cur_estimates (parameter placeholders)
                 feed_dict = self.fill_feed_dict_with_batch(self.data_sets.train, batch_size=batch_size)
+                feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, current_estimate)
 
-                feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, cur_estimate)
+                # running hessian_vector calls the hessian_vector_product in hessians.py, which
+                # multiplies v by the derivative of total loss wrt each parameter
                 hessian_vector_val = self.sess.run(self.hessian_vector, feed_dict=feed_dict)
-                cur_estimate = [a + (1-damping) * b - c/scale for (a,b,c) in zip(v, cur_estimate, hessian_vector_val)]    
+                # Update: current_estimate = v + (I - Hessian_at_x) * current_estimate
+                current_estimate = [a + (1-damping) * b - c/scale for (a,b,c) in
+                                zip(v, current_estimate, hessian_vector_val)]
 
-                # Update: v + (I - Hessian_at_x) * cur_estimate
                 if (j % print_iter == 0) or (j == recursion_depth - 1):
-                    print("Recursion at depth %s: norm is %.8lf" % (j, np.linalg.norm(np.concatenate(cur_estimate))))
-                    feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, cur_estimate)
+                    print("Recursion at depth %s: norm is %.8lf" %
+                          (j, np.linalg.norm(np.concatenate(current_estimate))))
+                    feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, current_estimate)
 
             if inverse_hvp is None:
-                inverse_hvp = [b/scale for b in cur_estimate]
+                inverse_hvp = [b/scale for b in current_estimate]
             else:
-                inverse_hvp = [a + b/scale for (a, b) in zip(inverse_hvp, cur_estimate)]  
+                inverse_hvp = [a + b/scale for (a, b) in zip(inverse_hvp, current_estimate)]
 
         inverse_hvp = [a/num_samples for a in inverse_hvp]
+
+
         return inverse_hvp
   
     
@@ -534,16 +561,14 @@ class GenericNeuralNet(object):
         hessian_vector_val = None
         for i in range(num_iter):
             feed_dict = self.fill_feed_dict_with_batch(self.data_sets.train, batch_size=batch_size)
-            # Can optimize this
             feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, v)
             hessian_vector_val_temp = self.sess.run(self.hessian_vector, feed_dict=feed_dict)
             if hessian_vector_val is None:
                 hessian_vector_val = [b / float(num_iter) for b in hessian_vector_val_temp]
             else:
-                hessian_vector_val = [a + (b / float(num_iter)) for (a,b) in zip(hessian_vector_val, hessian_vector_val_temp)]
-            
+                hessian_vector_val = [a + (b / float(num_iter)) for (a,b) in
+                                      zip(hessian_vector_val, hessian_vector_val_temp)]
         hessian_vector_val = [a + self.damping * b for (a,b) in zip(hessian_vector_val, v)]
-
         return hessian_vector_val
 
 
@@ -574,6 +599,7 @@ class GenericNeuralNet(object):
         fmin_loss_fn = self.get_fmin_loss_fn(v)
         
         def fmin_loss_split(x):
+            # difference to fmin_loss_fn(): it's splitted
             hessian_vector_val = self.minibatch_hessian_vector_val(self.vec_to_list(x))
 
             return 0.5 * np.dot(np.concatenate(hessian_vector_val), x), -np.dot(np.concatenate(v), x)
@@ -584,8 +610,10 @@ class GenericNeuralNet(object):
             idx_to_remove = 5
 
             single_train_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, idx_to_remove)      
-            train_grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=single_train_feed_dict)
-            predicted_loss_diff = np.dot(np.concatenate(v), np.concatenate(train_grad_loss_val)) / self.num_train_examples
+            train_grad_loss_val = self.sess.run(self.grad_total_loss_op,  # d(total loss)/d(params)
+                                                feed_dict=single_train_feed_dict)
+            predicted_loss_diff = np.dot(np.concatenate(v),
+                                         np.concatenate(train_grad_loss_val)) / self.num_train_examples
 
             if verbose:
                 print('Function value: %s' % fmin_loss_fn(x))
@@ -611,10 +639,11 @@ class GenericNeuralNet(object):
             maxiter=100) 
 
         return self.vec_to_list(fmin_results)
-
+######################################################################################################
 
     def get_test_grad_loss_no_reg_val(self, test_indices, batch_size=100, loss_type='normal_loss'):
-
+        # get the test gradient loss wrt the parameters, averaged over every instances of
+        # testing points
         if loss_type == 'normal_loss':
             op = self.grad_loss_no_reg_op
         elif loss_type == 'adversarial_loss':
@@ -630,14 +659,16 @@ class GenericNeuralNet(object):
                 start = i * batch_size
                 end = int(min((i+1) * batch_size, len(test_indices)))
 
-                test_feed_dict = self.fill_feed_dict_with_some_ex(self.data_sets.test, test_indices[start:end])
+                test_feed_dict = self.fill_feed_dict_with_some_ex(self.data_sets.test,
+                                                                  test_indices[start:end])
 
                 temp = self.sess.run(op, feed_dict=test_feed_dict)
 
                 if test_grad_loss_no_reg_val is None:
                     test_grad_loss_no_reg_val = [a * (end-start) for a in temp]
                 else:
-                    test_grad_loss_no_reg_val = [a + b * (end-start) for (a, b) in zip(test_grad_loss_no_reg_val, temp)]
+                    test_grad_loss_no_reg_val = [a + b * (end-start) for (a, b) in
+                                                 zip(test_grad_loss_no_reg_val, temp)]
 
             test_grad_loss_no_reg_val = [a/len(test_indices) for a in test_grad_loss_no_reg_val]
 
@@ -647,21 +678,31 @@ class GenericNeuralNet(object):
         return test_grad_loss_no_reg_val
 
 
-    def get_influence_on_test_loss(self, test_indices, train_idx, 
-        approx_type='cg', approx_params=None, force_refresh=True, test_description=None,
-        loss_type='normal_loss',
-        X=None, Y=None):
+    def get_influence_on_test_loss(self,
+                                   test_indices,
+                                   train_idx,
+                                   approx_type='cg',
+                                   approx_params=None,
+                                   force_refresh=True,
+                                   test_description=None,
+                                   loss_type='normal_loss',
+                                   X=None,
+                                   Y=None):
         # If train_idx is None then use X and Y (phantom points)
         # Need to make sure test_idx stays consistent between models
         # because mini-batching permutes dataset order
 
         if train_idx is None: 
-            if (X is None) or (Y is None): raise ValueError('X and Y must be specified if using phantom points.')
-            if X.shape[0] != len(Y): raise ValueError('X and Y must have the same length.')
+            if (X is None) or (Y is None):
+                raise ValueError('X and Y must be specified if using phantom points.')
+            if X.shape[0] != len(Y):
+                raise ValueError('X and Y must have the same length.')
         else:
-            if (X is not None) or (Y is not None): raise ValueError('X and Y cannot be specified if train_idx is specified.')
+            if (X is not None) or (Y is not None):
+                raise ValueError('X and Y cannot be specified if train_idx is specified.')
 
-        test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices, loss_type=loss_type)
+        test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices,
+                                                                       loss_type=loss_type)
 
         print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
 
