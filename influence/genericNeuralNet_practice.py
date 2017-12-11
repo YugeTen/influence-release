@@ -657,6 +657,8 @@ class GenericNeuralNet(object):
                                    X=None,
                                    Y=None):
 
+
+
         if train_idx is None:
             if (X is None) or (Y is None):
                 raise ValueError('X and Y must be specified if using phatom points.')
@@ -668,22 +670,150 @@ class GenericNeuralNet(object):
         test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices,
                                                                        loss_type=loss_type)
 
+        print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
 
+        start_time = time.time()
 
+        if test_description is None:
+            test_description = test_indices
 
+        approx_filename = os.path.join(self.train_dir, '%s-%s-%s-test-%s.npz' %
+                                       (self.model_name, approx_type, loss_type, test_description))
+        if os.path.exists(approx_filename) and force_refresh == False:
+            inverse_hvp = list(np.load(approx_filename)['inverse_hvp'])
+            print('Loaded inverse HVP from %s' % approx_filename)
+        else:
+            inverse_hvp = self.get_inverse_hvp(
+                test_grad_loss_no_reg_val,
+                approx_type,
+                approx_params
+            )
+            np.savez(approx_filename, inverse_hvp=inverse_hvp)
+            print('Saved inverse HVP to %s' % approx_filename)
+        duration = time.time() - start_time
+        print('Inverse HVP took %.2f sec' % duration)
 
+        start_time = time.time()
+        if train_idx is None:
+            num_to_remove = len(Y)
+            predicted_loss_diffs = np.zeros([num_to_remove])
+            for counter in np.arange(num_to_remove):
+                single_train_feed_dict = self.fill_feed_dict_manual(X[counter, :],
+                                                                    [Y[counter]])
+                train_grad_loss_val = self.sess.run(self.grad_total_loss_op,
+                                                    feed_dict=single_train_feed_dict)
+                predicted_loss_diffs[counter] = np.dot(np.concatenate(inverse_hvp),
+                                                       np.concatenate(train_grad_loss_val)) \
+                                                / self.num_train_examples
+        else:
+            num_to_remove = len(train_idx)
+            predicted_loss_diffs = np.zeros([num_to_remove])
+            for counter, idx_to_remove in enumerate(train_idx):
+                single_train_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, idx_to_remove)
+                train_grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=single_train_feed_dict)
+                predicted_loss_diffs[counter] = np.dot(np.concatenate(inverse_hvp),
+                                                       np.concatenate(train_grad_loss_val))\
+                                                / self.num_train_examples
+        duration = time.time() - start_time
+        print('Multiplying by %s train examples took %s sec' % (num_to_remove, duration))
 
+        return predicted_loss_diffs
 
+    def find_eigvals_of_hessian(self, num_iter=100, num_prints=10):
 
+        # Setup
+        print_iterations = num_iter / num_prints
+        feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, 0)
 
+        # Initialize starting vector: create a vector made up by random values with the
+        # exact same shape of d(total loss)/d(parameters)
+        grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=feed_dict)
+        initial_v = []
 
+        for a in grad_loss_val:
+            initial_v.append(np.random.random(a.shape))
+        initial_v, norm_val = normalize_vector(initial_v)  # divided by normal value of vector
 
+        # Do power iteration to find largest and smallest eigenvalue
+        print('Starting power iteration to find largest and smallest eigenvalue...')
 
+        largest_eig = norm_val
+        print('Initial average value of of the eigenvlaue is %s' % largest_eig)
 
+        # Do power iteration to find smallest eigenvalue
+        current_estimate = initial_v
 
+        for i in range(num_iter):
+            current_estimate, norm_val = normalize_vector(current_estimate)
+            hessian_vector_val = self.minibatch_hessian_vector_val(current_estimate)
+            # call hessian_vector_product defined in influence\hessians.py
+            new_current_estimate = [a - largest_eig * b for
+                                    (a, b) in
+                                    zip(hessian_vector_val, current_estimate)]
 
+            if i % print_iterations == 0:
+                print(-norm_val + largest_eig)
+                dotp = np.dot(np.concatenate(new_current_estimate), np.concatenate(current_estimate))
+                print("dot: %s" % dotp)
+            current_estimate = new_current_estimate
 
+        smallest_eig = -norm_val + largest_eig
+        assert dotp < 0, "Eigenvalue calc failed to find largest eigenvalue"
 
+        print('Largest eigenvalue is %s' % largest_eig)
+        print('Smallest eigenvalue is %s' % smallest_eig)
+        return largest_eig, smallest_eig
+
+    def get_grad_of_influence_wrt_input(self,
+                                        train_indices,
+                                        test_indices,
+                                        approx_type='cg',
+                                        approx_params=None,
+                                        force_refresh=True,
+                                        verbose=True,
+                                        test_description=None,
+                                        loss_type='normal_loss'):
+        """
+        This method is used for data poisoning (adversarial attack). Similar to
+        get_influence_on_test_loss, we calculate the d(loss on test set)/d(parameters)
+        using get_test_grad_loss_no_reg_val first, then with the result calculate HVP
+        wrt all test_indices.
+
+        Now, we populate the feed_dict with each tranining instance specified in
+        train_indices iteratively, and populate the v_placeholder with the inverse
+        HVP of test_indices. By calling the grad_influence_wrt_input_op, we return a list
+        of influence vs. input gradient, with each entry of the list correspond to the
+        gradient of each input.
+
+        The usage of this function's output is as follow:
+
+            If the loss (influence) goes up when you remove a point, then the point was
+            a helpful point. Therefore positive influence would indicate that the training
+            point has positive effect on accurate prediction. If we move in the direction
+            of the gradient (of influence wrt input), we are able to make the influence even more positive. Therefore, if we want to make the model perform worse on test point, we need to move
+            in the opposite direction.
+
+        Args:
+            train_indices:
+            test_indices:
+            approx_type:
+            approx_params:
+            force_refresh:
+            verbose:
+            test_description:
+            loss_type:
+        Return:
+
+        """
+        test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices,
+                                                                       loss_type=loss_type)
+        if verbose:
+            print("Norm of test gradient: %s" % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
+        start_time = time.time()
+
+        if test_description is None:
+            test_description = test_indices
+        approx_filename = os.path
 
 
 

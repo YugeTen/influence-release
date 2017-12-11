@@ -171,9 +171,13 @@ class GenericNeuralNet(object):
         
 
     def get_vec_to_list_fn(self):
+        # 2 functionality:
+        #   (1) Prints total number of parameters used in model
+        #   (2) return vec_to_list function, which turns input v to a list
         params_val = self.sess.run(self.params)
         self.num_params = len(np.concatenate(params_val))        
         print('Total number of parameters: %s' % self.num_params)
+        print('Total number of train examples: %s' % self.num_train_examples)
 
 
         def vec_to_list(v):
@@ -190,12 +194,15 @@ class GenericNeuralNet(object):
 
 
     def reset_datasets(self):
+        # for each test/validation/train split in self.data_sets, run reset_batch()
+        # defined in DataSet class if the split is not empty
         for data_set in self.data_sets:
             if data_set is not None:
                 data_set.reset_batch()
 
 
     def fill_feed_dict_with_all_ex(self, data_set):
+        # with split data_set from data_sets, populate feed_dict and return
         feed_dict = {
             self.input_placeholder: data_set.x,
             self.labels_placeholder: data_set.labels
@@ -204,6 +211,8 @@ class GenericNeuralNet(object):
 
 
     def fill_feed_dict_with_all_but_one_ex(self, data_set, idx_to_remove):
+        # same as fill_feed_dict_with_all_ex, but ignore index specified
+        # by idx_to_remove
         num_examples = data_set.x.shape[0]
         idx = np.array([True] * num_examples, dtype=bool)
         idx[idx_to_remove] = False
@@ -215,6 +224,8 @@ class GenericNeuralNet(object):
 
 
     def fill_feed_dict_with_batch(self, data_set, batch_size=0):
+        # same as fill_feed_dict_with_all_ex, but fill only batch_size number
+        # of samples
         if batch_size is None:
             return self.fill_feed_dict_with_all_ex(data_set)
         elif batch_size == 0:
@@ -229,6 +240,8 @@ class GenericNeuralNet(object):
 
 
     def fill_feed_dict_with_some_ex(self, data_set, target_indices):
+        # same as fill_feed_dict_with_all_ex, but fill only indices specified by
+        # target_indices
         input_feed = data_set.x[target_indices, :].reshape(len(target_indices), -1)
         labels_feed = data_set.labels[target_indices].reshape(-1)
         feed_dict = {
@@ -239,6 +252,8 @@ class GenericNeuralNet(object):
 
 
     def fill_feed_dict_with_one_ex(self, data_set, target_idx):
+        # same as fill_feed_dict_with_all_ex, but fill only index specified by
+        # target_idx
         input_feed = data_set.x[target_idx, :].reshape(1, -1)
         labels_feed = data_set.labels[target_idx].reshape(-1)
         feed_dict = {
@@ -249,6 +264,8 @@ class GenericNeuralNet(object):
 
 
     def fill_feed_dict_manual(self, X, Y):
+        # same as fill_feed_dict_with_all_ex, but fill only with one instance
+        # of (X,Y)
         X = np.array(X)
         Y = np.array(Y) 
         input_feed = X.reshape(len(Y), -1)
@@ -261,7 +278,12 @@ class GenericNeuralNet(object):
 
 
     def minibatch_mean_eval(self, ops, data_set):
+        # helper function for print_model_eval, with the split specified by
+        # data_set and operations specified by ops, evaluate the average of each
+        # operation output for each minibatch
 
+        # used for finding the mean of each mini batch of accuracy/loss/derivative
+        # of loss to parameters, called by function print_model_eval
         num_examples = data_set.num_examples
         assert num_examples % self.batch_size == 0
         num_iter = int(num_examples / self.batch_size)
@@ -290,6 +312,12 @@ class GenericNeuralNet(object):
 
 
     def print_model_eval(self):
+        # with the aid of minibatch_mean_eval, print out:
+        #   mean training loss with/without regression
+        #   mean testing loss without regression
+        #   mean training and testing accuracy
+        #   norm of the mean of total loss to parameter gradient
+        #   norm of all parameters
         params_val = self.sess.run(self.params)
 
         if self.mini_batch == True:
@@ -311,29 +339,33 @@ class GenericNeuralNet(object):
                 feed_dict=self.all_test_feed_dict)
 
 
-        print('All values are taken average among all data')
-        print('Train loss (with regression): %s' % loss_val)
-        print('Train loss (without regression): %s' % loss_no_reg_val)
-        print('Test loss (without regression): %s' % test_loss_val)
+
+        print('(All values are taken average among all data)')
+        print('Train loss (with regression): %.2f' % loss_val)
+        print('Train loss (without regression): %.2f' % loss_no_reg_val)
+        print('Test loss (without regression): %.2f' % test_loss_val)
 
         print()
 
-        print('Train accuracy:  %s' % train_acc_val)
-        print('Test accuracy: %s' % test_acc_val)
+        print('Train accuracy:  %.2f' % train_acc_val)
+        print('Test accuracy: %.2f' % test_acc_val)
 
         print()
 
-        print('Norm of the mean of gradients (loss to parameters): %s' % np.linalg.norm(np.concatenate(grad_loss_val)))
-        print('Norm of the parameters: %s' % np.linalg.norm(np.concatenate(params_val)))
+        print('Norm of gradients (loss to params): %.2f' % np.linalg.norm(np.concatenate(grad_loss_val)))
+        print('Norm of the parameters: %.2f' % np.linalg.norm(np.concatenate(params_val)))
 
-
+        print()
 
     def retrain(self, num_steps, feed_dict):        
-        for step in range(num_steps):   
+        # run train_op for num_steps number of times with feed_dict
+        for step in range(num_steps):
             self.sess.run(self.train_op, feed_dict=feed_dict)
 
 
     def update_learning_rate(self, step):
+        # with Args:step calculate which epoch this is, and using decay_epoch (a length 2 list)
+        # determine if the multiplier applied to initial_learning_rate is 1, 0.1 or 0.01
         assert self.num_train_examples % self.batch_size == 0
         num_steps_in_epoch = self.num_train_examples / self.batch_size
         epoch = step // num_steps_in_epoch
@@ -355,9 +387,10 @@ class GenericNeuralNet(object):
               iter_to_switch_to_batch=20000, 
               iter_to_switch_to_sgd=40000,
               save_checkpoints=True, verbose=True):
-        """
-        Trains a model for a specified number of steps.
-        """
+        # 3 training mode, specified by iter_to_switch_to_batch and iter_to_switch_to_sgd:
+        #   mini-batch training:    fill_feed_dict_with_batch, sess run train_op & total_loss
+        #   batch training:         all_train_feed_dict,       sess run train_op & total_loss
+        #   sgd training:           all_train_feed_dict,       sess run train_sgd_op & total_loss
         if verbose: print('Training for %s steps' % num_steps)
 
         sess = self.sess            
@@ -393,6 +426,8 @@ class GenericNeuralNet(object):
 
 
     def load_checkpoint(self, iter_to_load, do_checks=True):
+        # restore the checkpoints (model) saved at iteration specified by iter_to_load
+        # and print the model evaluation at that time by calling print_model_eval()
         checkpoint_to_load = "%s-%s" % (self.checkpoint_file, iter_to_load) 
         self.saver.restore(self.sess, checkpoint_to_load)
 
@@ -402,25 +437,21 @@ class GenericNeuralNet(object):
 
 
     def get_train_op(self, total_loss, global_step, learning_rate):
-        """
-        Return train_op
-        """
+        # run adam optimizer, return optimizer.minimize
         optimizer = tf.train.AdamOptimizer(learning_rate)
         train_op = optimizer.minimize(total_loss, global_step=global_step)
         return train_op
 
 
     def get_train_sgd_op(self, total_loss, global_step, learning_rate=0.001):
-        """
-        Return train_sgd_op
-        """
+        # run gradient descent optimizer, return optimizer.minimize
         optimizer = tf.train.GradientDescentOptimizer(learning_rate)
         train_op = optimizer.minimize(total_loss, global_step=global_step)
         return train_op
 
 
     def get_accuracy_op(self, logits, labels):
-        """Evaluate the quality of the logits at predicting the label.
+        """
         Args:
           logits: Logits tensor, float - [batch_size, NUM_CLASSES].
           labels: Labels tensor, int32 - [batch_size], with values in the
@@ -439,6 +470,11 @@ class GenericNeuralNet(object):
           logits: Logits tensor, float - [batch_size, NUM_CLASSES].
           labels: Labels tensor, int32 - [batch_size], with values in the
             range [0, NUM_CLASSES).
+        Returns:
+            indiv_loss_no_reg:  cross entropy loss of single instances;
+            loss_no_reg:        average cross entropy loss across the whole batch;
+            total_loss:         sum of average cross entropy batch loss of all
+                                training points so far.
         """
         labels = tf.one_hot(labels, depth=self.num_classes)
         cross_entropy = - tf.reduce_sum(tf.multiply(labels, tf.nn.log_softmax(logits)),
@@ -457,9 +493,17 @@ class GenericNeuralNet(object):
 
 
     def adversarial_loss(self, logits, labels):
-        # Computes sum of log(1 - p(y = true|x))
-        # No regularization (because this is meant to be computed on the test data)
-
+        """
+        Calculates:
+            log(sum(exp(value_of_logits_of_all_the_negative_labels_judged_by_NN))) -
+            log(sum(exp(value_of_all_logits)))
+        Args:
+            logits: tensor, float, [batch_size, num_classes]
+            labels: tensor, int, [batch_size], with values in range [0, num_classes)
+        Return:
+            indiv_adversarial_loss: cross entropy loss of single instances;
+            adversarial_loss: average cross entropy across the whole batch
+        """
         labels = tf.one_hot(labels, depth=self.num_classes)        
         wrong_labels = (labels - 1) * -1 # Flips 0s and 1s
         wrong_labels_bool = tf.reshape(tf.cast(wrong_labels, tf.bool), [-1, self.num_classes])
@@ -498,6 +542,10 @@ class GenericNeuralNet(object):
 
 
 ################################################ HVP ################################################
+    """
+    the main method in HVP part is get_inverset_hvp, the rest are helper functions that
+    can be ignored when using the class genericNeuralNet
+    """
     def get_inverse_hvp(self, v, approx_type='cg', approx_params=None, verbose=True):
         assert approx_type in ['cg', 'lissa']
         if approx_type == 'lissa':
@@ -509,7 +557,6 @@ class GenericNeuralNet(object):
     def get_inverse_hvp_lissa(self, v, 
                               batch_size=None,
                               scale=10, damping=0.0, num_samples=1, recursion_depth=10000):
-
         inverse_hvp = None
         print_iter = recursion_depth / 10
 
@@ -531,7 +578,7 @@ class GenericNeuralNet(object):
                                 zip(v, current_estimate, hessian_vector_val)]
 
                 if (j % print_iter == 0) or (j == recursion_depth - 1):
-                    print("Recursion at depth %s: norm is %.8lf" %
+                    print("Recursion at depth %s: norm is %.4lf" %
                           (j, np.linalg.norm(np.concatenate(current_estimate))))
                     feed_dict = self.update_feed_dict_with_v_placeholder(feed_dict, current_estimate)
 
@@ -616,11 +663,11 @@ class GenericNeuralNet(object):
                                          np.concatenate(train_grad_loss_val)) / self.num_train_examples
 
             if verbose:
-                print('Function value: %s' % fmin_loss_fn(x))
+                print('Function value: %.2f' % fmin_loss_fn(x))
                 quad, lin = fmin_loss_split(x)
-                print('Split function value: %s, %s' % (quad, lin))
-                print('Predicted loss diff on train_idx %s: %s' % (idx_to_remove, predicted_loss_diff))
-
+                print('Split function value: %.2f, %.2f' % (quad, lin))
+                print('Predicted influence of train_idx %s: %.5f' % (idx_to_remove, predicted_loss_diff))
+                print()
         return cg_callback
 
 
@@ -642,8 +689,11 @@ class GenericNeuralNet(object):
 ######################################################################################################
 
     def get_test_grad_loss_no_reg_val(self, test_indices, batch_size=100, loss_type='normal_loss'):
-        # get the test gradient loss wrt the parameters, averaged over every instances of
-        # testing points
+        # A helper function for get_influence_on_test_loss:
+        #
+        # The function takes a list of test indices and calculates d(loss on test set)/d(parameters)
+        # (can be normal loss or adversarial loss), take average. Returns single value. The output
+        # of this function is needed for HVP calculation.
         if loss_type == 'normal_loss':
             op = self.grad_loss_no_reg_op
         elif loss_type == 'adversarial_loss':
@@ -674,13 +724,12 @@ class GenericNeuralNet(object):
 
         else:
             test_grad_loss_no_reg_val = self.minibatch_mean_eval([op], self.data_sets.test)[0]
-        
         return test_grad_loss_no_reg_val
 
 
     def get_influence_on_test_loss(self,
                                    test_indices,
-                                   train_idx,
+                                   train_indices,
                                    approx_type='cg',
                                    approx_params=None,
                                    force_refresh=True,
@@ -688,11 +737,42 @@ class GenericNeuralNet(object):
                                    loss_type='normal_loss',
                                    X=None,
                                    Y=None):
-        # If train_idx is None then use X and Y (phantom points)
-        # Need to make sure test_idx stays consistent between models
-        # because mini-batching permutes dataset order
 
-        if train_idx is None: 
+
+        # First we use the get_test_grad_loss_no_reg_val function to calculate
+        # d(loss on test set)/d(parameters), with test set specified by list
+        # test_indices. Using the return value of the function, we then calculate
+        # the HVP wrt all entries in test_indices and save into an .npz file labeled
+        # by these indices (or load if exist).
+        #
+        # We then train the model with each one of the single training datapoint
+        # specified by train_indices (or X, Y), take the gradient of the training loss
+        # w.r.t. parameters, and multiply each one by inverse HVP of test_indices, which
+        # gives us a list, with its entries corresponding to the influence of each training
+        # datapoints in train_indices
+
+        # Args:
+        #   test_indices:       A list of test indices we want to test the influence on
+        #   train_indices:      A list of train indices we want to test the influence for
+        #   approx_type:        'cg' or 'lissa'
+        #   approx_params:      If 'lissa' provide batch_size, (optional arguments scale,
+        #                       damping, num_samples, recursion_depth), otherwise None
+        #   force_refresh:      Whether to recalculate the inverse HVP of existed .npz
+        #   test_description:   When test_indices is too long, you might not want to use
+        #                       this list as your .npz file name. in this case, put in
+        #                       a description instead for simplicity
+        #   loss_type:          'normal_loss' or 'adversarial_loss'
+        #   X, Y:               When you want to specify the actual training datapoints you
+        #                       wish to test the influence for (instead of their indices
+        #                       in dataset), populate X, Y with training points.
+        #                       X: [num_examples, datalength]
+        #                       Y: [num_examples] (labels)
+
+        # Returns:
+        #   influences:   A list of influence evaluated for each training data point
+        #                 against all testing indices.
+        #                           len(influences) = len(train_indices)
+        if train_indices is None:
             if (X is None) or (Y is None):
                 raise ValueError('X and Y must be specified if using phantom points.')
             if X.shape[0] != len(Y):
@@ -704,14 +784,17 @@ class GenericNeuralNet(object):
         test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices,
                                                                        loss_type=loss_type)
 
-        print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
+        print('Norm of test gradients (loss to params): %s' %
+              np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
 
         start_time = time.time()
 
         if test_description is None:
             test_description = test_indices
 
-        approx_filename = os.path.join(self.train_dir, '%s-%s-%s-test-%s.npz' % (self.model_name, approx_type, loss_type, test_description))
+        approx_filename = os.path.join(self.train_dir, '%s-%s-%s-test-%s.npz'
+                                       % (self.model_name, approx_type, loss_type, test_description))
+                                        # dogfish_inception    cg      normal_loss      [462]
         if os.path.exists(approx_filename) and force_refresh == False:
             inverse_hvp = list(np.load(approx_filename)['inverse_hvp'])
             print('Loaded inverse HVP from %s' % approx_filename)
@@ -722,70 +805,79 @@ class GenericNeuralNet(object):
                 approx_params)
             np.savez(approx_filename, inverse_hvp=inverse_hvp)
             print('Saved inverse HVP to %s' % approx_filename)
-
-        duration = time.time() - start_time
-        print('Inverse HVP took %s sec' % duration)
+            duration = time.time() - start_time
+            print('Inverse HVP took %.2f sec' % duration)
 
 
 
         start_time = time.time()
-        if train_idx is None:
+        if train_indices is None:
+
             num_to_remove = len(Y)
-            predicted_loss_diffs = np.zeros([num_to_remove])            
+            influences = np.zeros([num_to_remove])
             for counter in np.arange(num_to_remove):
-                single_train_feed_dict = self.fill_feed_dict_manual(X[counter, :], [Y[counter]])      
-                train_grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=single_train_feed_dict)
-                predicted_loss_diffs[counter] = np.dot(np.concatenate(inverse_hvp), np.concatenate(train_grad_loss_val)) / self.num_train_examples            
+                single_train_feed_dict = self.fill_feed_dict_manual(X[counter, :],
+                                                                    [Y[counter]])
+                train_grad_loss_val = self.sess.run(self.grad_total_loss_op,
+                                                    feed_dict=single_train_feed_dict)
+                influences[counter] = np.dot(np.concatenate(inverse_hvp),
+                                                       np.concatenate(train_grad_loss_val)) \
+                                                / self.num_train_examples
 
         else:            
-            num_to_remove = len(train_idx)
-            predicted_loss_diffs = np.zeros([num_to_remove])
-            for counter, idx_to_remove in enumerate(train_idx):            
-                single_train_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, idx_to_remove)      
-                train_grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=single_train_feed_dict)
-                predicted_loss_diffs[counter] = np.dot(np.concatenate(inverse_hvp), np.concatenate(train_grad_loss_val)) / self.num_train_examples
-                
+            num_to_remove = len(train_indices)
+            influences = np.zeros([num_to_remove])
+            for counter, idx_to_remove in enumerate(train_indices):
+                single_train_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train,
+                                                                         idx_to_remove)
+                train_grad_loss_val = self.sess.run(self.grad_total_loss_op,
+                                                    feed_dict=single_train_feed_dict)
+                influences[counter] = np.dot(np.concatenate(inverse_hvp),
+                                                       np.concatenate(train_grad_loss_val))\
+                                                / self.num_train_examples
         duration = time.time() - start_time
         print('Multiplying by %s train examples took %s sec' % (num_to_remove, duration))
 
-        return predicted_loss_diffs
+        return influences
 
 
 
     def find_eigvals_of_hessian(self, num_iter=100, num_prints=10):
+        # Find the largest and smallest eigenvalues of hessian vector product matrix
+        # by doing a power iteration (the hessian vector product seems to be random?)
 
         # Setup        
         print_iterations = num_iter / num_prints
-        feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, 0)
 
-        # Initialize starting vector
+        # Initialize starting vector: create a vector made up by random values with the
+        # exact same shape of d(total loss)/d(parameters)
+        feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, 0)
         grad_loss_val = self.sess.run(self.grad_total_loss_op, feed_dict=feed_dict)
         initial_v = []
-
         for a in grad_loss_val:
             initial_v.append(np.random.random(a.shape))        
-        initial_v, norm_val = normalize_vector(initial_v)
+        initial_v, norm_val = normalize_vector(initial_v) # divided by normal value of vector
 
-        # Do power iteration to find largest eigenvalue
-        print('Starting power iteration to find largest eigenvalue...')
-
-        largest_eig = norm_val
-        print('Largest eigenvalue is %s' % largest_eig)
+        # Do power iteration to find largest and smallest eigenvalue
+        print('Starting power iteration to find largest and smallest eigenvalue...')
+        print('Initial average value of of the eigenvlaue is %s' % norm_val)
 
         # Do power iteration to find smallest eigenvalue
-        print('Starting power iteration to find smallest eigenvalue...')
-        cur_estimate = initial_v
-        
+        largest_eig = norm_val
+        current_estimate = initial_v
         for i in range(num_iter):          
-            cur_estimate, norm_val = normalize_vector(cur_estimate)
-            hessian_vector_val = self.minibatch_hessian_vector_val(cur_estimate)
-            new_cur_estimate = [a - largest_eig * b for (a,b) in zip(hessian_vector_val, cur_estimate)]
+            current_estimate, norm_val = normalize_vector(current_estimate)
+            hessian_vector_val = self.minibatch_hessian_vector_val(current_estimate)
+                                # call hessian_vector_product defined in influence\hessians.py
+            new_current_estimate = [a - largest_eig * b for
+                                    (a, b) in
+                                    zip(hessian_vector_val, current_estimate)]
 
             if i % print_iterations == 0:
                 print(-norm_val + largest_eig)
-                dotp = np.dot(np.concatenate(new_cur_estimate), np.concatenate(cur_estimate))
+                dotp = np.dot(np.concatenate(new_current_estimate), np.concatenate(current_estimate))
                 print("dot: %s" % dotp)
-            cur_estimate = new_cur_estimate
+            current_estimate = new_current_estimate
 
         smallest_eig = -norm_val + largest_eig
         assert dotp < 0, "Eigenvalue calc failed to find largest eigenvalue"
@@ -795,9 +887,15 @@ class GenericNeuralNet(object):
         return largest_eig, smallest_eig
 
 
-    def get_grad_of_influence_wrt_input(self, train_indices, test_indices, 
-        approx_type='cg', approx_params=None, force_refresh=True, verbose=True, test_description=None,
-        loss_type='normal_loss'):
+    def get_grad_of_influence_wrt_input(self,
+                                        train_indices,
+                                        test_indices,
+                                        approx_type='cg',
+                                        approx_params=None,
+                                        force_refresh=True,
+                                        verbose=True,
+                                        test_description=None,
+                                        loss_type='normal_loss'):
         """
         If the loss goes up when you remove a point, then it was a helpful point.
         So positive influence = helpful.
@@ -807,16 +905,19 @@ class GenericNeuralNet(object):
         """
 
         # Calculate v_placeholder (gradient of loss at test point)
-        test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices, loss_type=loss_type)            
+        test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices,
+                                                                       loss_type=loss_type)
 
-        if verbose: print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
+        if verbose:
+            print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
         
         start_time = time.time()
 
         if test_description is None:
             test_description = test_indices
 
-        approx_filename = os.path.join(self.train_dir, '%s-%s-%s-test-%s.npz' % (self.model_name, approx_type, loss_type, test_description))
+        approx_filename = os.path.join(self.train_dir, '%s-%s-%s-test-%s.npz' %
+                                       (self.model_name, approx_type, loss_type, test_description))
         
         if os.path.exists(approx_filename) and force_refresh == False:
             inverse_hvp = list(np.load(approx_filename)['inverse_hvp'])
@@ -830,27 +931,28 @@ class GenericNeuralNet(object):
             np.savez(approx_filename, inverse_hvp=inverse_hvp)
             if verbose: print('Saved inverse HVP to %s' % approx_filename)            
         
-        duration = time.time() - start_time
-        if verbose: print('Inverse HVP took %s sec' % duration)
+            duration = time.time() - start_time
+            if verbose: print('Inverse HVP took %s sec' % duration)
 
         grad_influence_wrt_input_val = None
 
         for counter, train_idx in enumerate(train_indices):
             # Put in the train example in the feed dict
-            grad_influence_feed_dict = self.fill_feed_dict_with_one_ex(
-                self.data_sets.train,  
-                train_idx)
-
+            grad_influence_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, train_idx)
             self.update_feed_dict_with_v_placeholder(grad_influence_feed_dict, inverse_hvp)
+            # fill the self.v_placeholder (not feed dict) with inverse HVP
 
-            # Run the grad op with the feed dict
-            current_grad_influence_wrt_input_val = self.sess.run(self.grad_influence_wrt_input_op, feed_dict=grad_influence_feed_dict)[0][0, :]            
+            # Run the gradient op with the feed dict, calculate the gradient of influence with
+            # respect to input (specified by train_idx)
+            current_grad_influence_wrt_input_val = self.sess.run(self.grad_influence_wrt_input_op,
+                                                                 feed_dict=grad_influence_feed_dict)[0][0, :]
             
             if grad_influence_wrt_input_val is None:
-                grad_influence_wrt_input_val = np.zeros([len(train_indices), len(current_grad_influence_wrt_input_val)])
+                grad_influence_wrt_input_val = np.zeros([len(train_indices),
+                                                         len(current_grad_influence_wrt_input_val)])
 
             grad_influence_wrt_input_val[counter, :] = current_grad_influence_wrt_input_val
-
+        # returns a list of gradient influence with respect to inputs
         return grad_influence_wrt_input_val
 
 

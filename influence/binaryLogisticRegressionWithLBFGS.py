@@ -77,12 +77,12 @@ class BinaryLogisticRegressionWithLBFGS(LogisticRegressionWithLBFGS):
 
     # Special-purpose function for paper experiments
     # that has flags for ignoring training error or Hessian
-    def get_influence_on_test_loss(self, test_indices, train_idx, 
-        approx_type='cg', approx_params=None, force_refresh=True, test_description=None,
-        loss_type='normal_loss',
-        ignore_training_error=False,
-        ignore_hessian=False
-        ):
+    def get_influence_on_test_loss(self, test_indices, train_indices,
+                                   approx_type='cg', approx_params=None, force_refresh=True, test_description=None,
+                                   loss_type='normal_loss',
+                                   ignore_training_error=False,
+                                   ignore_hessian=False
+                                   ):
 
         test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices, loss_type=loss_type)
 
@@ -114,9 +114,9 @@ class BinaryLogisticRegressionWithLBFGS(LogisticRegressionWithLBFGS):
 
         start_time = time.time()
 
-        num_to_remove = len(train_idx)
+        num_to_remove = len(train_indices)
         predicted_loss_diffs = np.zeros([num_to_remove])
-        for counter, idx_to_remove in enumerate(train_idx):            
+        for counter, idx_to_remove in enumerate(train_indices):
             
             if ignore_training_error == False:
                 single_train_feed_dict = self.fill_feed_dict_with_one_ex(self.data_sets.train, idx_to_remove)      

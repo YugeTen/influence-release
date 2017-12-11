@@ -269,6 +269,7 @@ class SmoothHinge(GenericNeuralNet):
         if save_checkpoints: self.saver.save(self.sess, self.checkpoint_file, global_step=0)
 
         if verbose:
+            print()
             print('SVM training took %s iter.' % model.n_iter_)
             print('After SVM training: ')
             self.print_model_eval()

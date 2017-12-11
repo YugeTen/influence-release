@@ -74,7 +74,7 @@ L_test = L[num_train:, :num_train]
 
 ### Compare top 5 influential examples from each network
 
-test_idx = 462
+test_indices = [120,462]
 
 ## RBF
 
@@ -140,7 +140,7 @@ params_feed_dict[rbf_model.W_placeholder] = hinge_W
 rbf_model.sess.run(rbf_model.set_params_op, feed_dict=params_feed_dict)
 
 rbf_predicted_loss_diffs = rbf_model.get_influence_on_test_loss(
-    [test_idx],
+    test_indices,
     np.arange(len(rbf_model.data_sets.train.labels)),
     force_refresh=True)
 
@@ -239,12 +239,12 @@ inception_model = BinaryLogisticRegressionWithLBFGS(
 inception_model.train()
 
 inception_predicted_loss_diffs = inception_model.get_influence_on_test_loss(
-    [test_idx],
+    test_indices,
     np.arange(len(inception_model.data_sets.train.labels)),
     force_refresh=True)
 
-x_test = X_test[test_idx, :]
-y_test = Y_test[test_idx]
+x_test = X_test[test_indices, :]
+y_test = Y_test[test_indices]
 
 
 distances = dataset.find_distances(x_test, X_train)
@@ -256,7 +256,7 @@ inception_Y_pred_correct = get_Y_pred_correct_inception(inception_model)
 
 np.savez(
     'output/rbf_results',
-    test_idx=test_idx,
+    test_idx=test_indices,
     distances=distances,
     flipped_idx=flipped_idx,
     rbf_margins_test=rbf_margins_test,

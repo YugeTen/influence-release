@@ -42,6 +42,9 @@ def select_examples_to_attack(model, num_to_poison, grad_influence_wrt_input_val
     # pred_diff = np.sum(diffs * grad_influence_wrt_input_val, axis = 1)    
     # This ignores the clipping, but it's faster    
     pred_diff = np.sum(np.abs(grad_influence_wrt_input_val), axis = 1)
+    # np.argsort:
+    # a = [232, 45, 2, 53]
+    # np.argsort(a) --> array([2, 1, 3, 0])
     indices_to_poison = np.argsort(pred_diff)[-1:-num_to_poison-1:-1] # First index is the most effective
     return indices_to_poison
     

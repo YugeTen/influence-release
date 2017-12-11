@@ -135,8 +135,8 @@ for counter, temp in enumerate(temps):
         
     cur_params, cur_margins = model.sess.run([model.params, model.margin], feed_dict=model.all_train_feed_dict)
     cur_influences = model.get_influence_on_test_loss(
-        test_indices=[test_idx], 
-        train_idx=np.arange(num_train), 
+        test_indices=[test_idx],
+        train_indices=np.arange(num_train),
         force_refresh=False)
     
     params[counter, :] = np.concatenate(cur_params)
