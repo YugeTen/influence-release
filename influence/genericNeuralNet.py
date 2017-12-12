@@ -897,11 +897,42 @@ class GenericNeuralNet(object):
                                         test_description=None,
                                         loss_type='normal_loss'):
         """
-        If the loss goes up when you remove a point, then it was a helpful point.
-        So positive influence = helpful.
-        If we move in the direction of the gradient, we make the influence even more positive, 
-        so even more helpful.
-        Thus if we want to make the test point more wrong, we have to move in the opposite direction.
+        This method is used for data poisoning (adversarial attack). Similar to
+        get_influence_on_test_loss, we calculate the d(loss on test set)/d(parameters)
+        using get_test_grad_loss_no_reg_val first, then with the result calculate HVP
+        wrt all test_indices.
+
+        Now, we populate the feed_dict with each training instance specified in
+        train_indices iteratively, and populate the v_placeholder with the inverse
+        HVP of test_indices. By calling the grad_influence_wrt_input_op, we return a list
+        of influence vs. input gradient, with each entry of the list correspond to the
+        gradient of each input.
+
+        The usage of this function's output is as follow:
+
+            If the loss (influence) goes up when you remove a point, then the point was
+            a helpful point. Therefore positive influence would indicate that the training
+            point has positive effect on accurate prediction. If we move in the direction
+            of the gradient (of influence wrt input), we are able to make the influence
+            even more positive. Therefore, if we want to make the model perform worse on
+            test point, we need to move in the opposite direction.
+
+        Args:
+           test_indices:       A list of test indices we want to test the influence on
+           train_indices:      A list of train indices we want to test the influence for
+           approx_type:        'cg' or 'lissa'
+           approx_params:      If 'lissa' provide batch_size, (optional arguments scale,
+                               damping, num_samples, recursion_depth), otherwise None
+           force_refresh:      Whether to recalculate the inverse HVP of existed .npz
+           test_description:   When test_indices is too long, you might not want to use
+                               this list as your .npz file name. in this case, put in
+                               a description instead for simplicity
+           loss_type:          'normal_loss' or 'adversarial_loss'
+
+
+        Returns:
+           grad_influence_wrt_input_val:
+                 Gradient of influence function with respect to inputs specified by train_indices
         """
 
         # Calculate v_placeholder (gradient of loss at test point)
@@ -935,6 +966,9 @@ class GenericNeuralNet(object):
             if verbose: print('Inverse HVP took %s sec' % duration)
 
         grad_influence_wrt_input_val = None
+        # we need to initialise grad_influence_wrt_input_val with the shape of
+        # current_grad)influence_wrt_input_val, which we are not quite sure of
+        # just yet. Therefore, the None here plays as a placeholder
 
         for counter, train_idx in enumerate(train_indices):
             # Put in the train example in the feed dict
@@ -956,25 +990,52 @@ class GenericNeuralNet(object):
         return grad_influence_wrt_input_val
 
 
+
+
     def update_train_x(self, new_train_x):
-        assert np.all(new_train_x.shape == self.data_sets.train.x.shape)
+        """
+        Updates training images (x) by providing new data new_train_x. Note that since we
+        are not updating y in this function, new_train_x has to be of exact the same shape
+        as the original training data (aka same number of training points).
+
+        self.data_sets, self.all_train_feed_dict attributes get updated.
+        """
+        assert np.all(new_train_x.shape == self.data_sets.train.x.shape) # is np.all necessary?
         new_train = DataSet(new_train_x, np.copy(self.data_sets.train.labels))
-        self.data_sets = base.Datasets(train=new_train, validation=self.data_sets.validation, test=self.data_sets.test)
+        self.data_sets = base.Datasets(train=new_train,
+                                       validation=self.data_sets.validation,
+                                       test=self.data_sets.test)
         self.all_train_feed_dict = self.fill_feed_dict_with_all_ex(self.data_sets.train)                
         self.reset_datasets()
 
 
     def update_train_x_y(self, new_train_x, new_train_y):
+        """
+        Updates training images (x) and labels (y) by providing new data new_train_x and
+        new_train_y.
+
+        self.num_train_examples, self.data_sets, self.all_train_feed_dict get updated.
+        """
         new_train = DataSet(new_train_x, new_train_y)
-        self.data_sets = base.Datasets(train=new_train, validation=self.data_sets.validation, test=self.data_sets.test)
+        self.data_sets = base.Datasets(train=new_train,
+                                       validation=self.data_sets.validation,
+                                       test=self.data_sets.test)
         self.all_train_feed_dict = self.fill_feed_dict_with_all_ex(self.data_sets.train)                
         self.num_train_examples = len(new_train_y)
         self.reset_datasets()        
 
 
     def update_test_x_y(self, new_test_x, new_test_y):
+        """
+        Updates testing images (x) and labels (y) by providing new data new_test_x and
+        new_test_y.
+
+        self.num_test_examples, self.data_sets, self.all_test_feed_dict get updated.
+        """
         new_test = DataSet(new_test_x, new_test_y)
-        self.data_sets = base.Datasets(train=self.data_sets.train, validation=self.data_sets.validation, test=new_test)
+        self.data_sets = base.Datasets(train=self.data_sets.train,
+                                       validation=self.data_sets.validation,
+                                       test=new_test)
         self.all_test_feed_dict = self.fill_feed_dict_with_all_ex(self.data_sets.test)                
         self.num_test_examples = len(new_test_y)
         self.reset_datasets()        
