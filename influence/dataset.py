@@ -32,36 +32,45 @@ class DataSet(object):
     def num_examples(self):
         return self._num_examples
 
-    def reset_batch(self):
-        self._index_in_epoch = 0        
-        self._x_batch = np.copy(self._x)
-        self._labels_batch = np.copy(self._labels)
-
     def next_batch(self, batch_size):
         assert batch_size <= self._num_examples
 
+        # find start and end index for current batch
         start = self._index_in_epoch
         self._index_in_epoch += batch_size
-        if self._index_in_epoch > self._num_examples:
+        end = self._index_in_epoch
 
-            # Shuffle the data
+        # shuffle the data when one epoch is finished
+        if self._index_in_epoch > self._num_examples:
             perm = np.arange(self._num_examples)
             np.random.shuffle(perm)
             self._x_batch = self._x_batch[perm, :]
             self._labels_batch = self._labels_batch[perm]
 
-            # Start next epoch
+            # Start new epoch
             start = 0
             self._index_in_epoch = batch_size
+            end = self._index_in_epoch
 
-        end = self._index_in_epoch
         return self._x_batch[start:end], self._labels_batch[start:end]
+
+    def reset_batch(self):
+        self._index_in_epoch = 0
+        self._x_batch = np.copy(self._x)
+        self._labels_batch = np.copy(self._labels)
 
 
 def filter_dataset(X, Y, pos_class, neg_class):
     """
-    Filters out elements of X and Y that aren't one of pos_class or neg_class
-    then transforms labels of Y so that +1 = pos_class, -1 = neg_class.
+    Transform all the positive class label to +1, negative to -1,
+    given the original label value pos_class and neg_class.
+    Args:
+        X:  image data
+        Y:  label data
+        pos_class:  scalar of how positive class is labeled in Y
+        neg_class:  scalar of how negative class is labeled in Y
+    Return:
+        (X, Y): properly labeled dataset
     """
     assert(X.shape[0] == Y.shape[0])
     assert(len(Y.shape) == 1)
