@@ -25,8 +25,10 @@ weight_decay = 0.01
 batch_size = 1400
 initial_learning_rate = 0.001 
 keep_probs = None
-max_lbfgs_iter = 1000
+max_lbfgs_iter = 5000
 decay_epochs = [1000, 10000]
+num_to_remove = 500
+remove_type = 'posinf'
 
 tf.reset_default_graph()
 
@@ -43,34 +45,42 @@ tf_model = LogisticRegressionWithLBFGS(
     mini_batch=False,
     train_dir='output',
     log_dir='log',
-    model_name='mnist_logreg_lbfgs')
+    model_name='mnist_logreg_lbfgs',
+    num_to_remove=num_to_remove)
 
 tf_model.train()
 
 test_idx = 8
 actual_loss_diffs, predicted_loss_diffs_cg, indices_to_remove = experiments.test_retraining(
     tf_model,
-    test_idx,
+    test_idx=test_idx,
     iter_to_load=0,
     force_refresh=False,
-    num_to_remove=500,
-    remove_type='maxinf',
-    random_seed=0)
-
-
+    num_to_remove=num_to_remove,
+    remove_type=remove_type,
+    random_seed=0,
+    approx_type='lissa',
+    approx_params={'batch_size':1}
+)
+# #
+# experiments.viz_top_influential_examples(tf_model, [123], 20)
 # LiSSA
 np.random.seed(17)
 predicted_loss_diffs_lissa = tf_model.get_influence_on_test_loss(
-    [test_idx], 
+    [test_idx],
     indices_to_remove,
     approx_type='lissa',
-    approx_params={'scale':25, 'recursion_depth':5000, 'damping':0, 'batch_size':1, 'num_samples':10},
+    approx_params={'scale':25,
+                   'recursion_depth':5000,
+                   'damping':0,
+                   'batch_size':1,
+                   'num_samples':10},
     force_refresh=True
 )
 
 np.savez(
-    'output/mnist_logreg_lbfgs_retraining-500.npz', 
-    actual_loss_diffs=actual_loss_diffs, 
+    'output/mnist_logreg_lbfgs_retraining-500.npz',
+    actual_loss_diffs=actual_loss_diffs,
     predicted_loss_diffs_cg=predicted_loss_diffs_cg,
     predicted_loss_diffs_lissa=predicted_loss_diffs_lissa,
     indices_to_remove=indices_to_remove

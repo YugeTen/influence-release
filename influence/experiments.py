@@ -54,22 +54,35 @@ def test_mislabeled_detection_batch(
 
 
 
-def viz_top_influential_examples(model, test_idx):
+def viz_top_influential_examples(model,
+                                 test_idx,
+                                 top_k=10,
+                                 approx_type='cg',
+                                 approx_params=None):
 
     model.reset_datasets()
     print('Test point %s has label %s.' % (test_idx, model.data_sets.test.labels[test_idx]))
 
     num_to_remove = 10000
     indices_to_remove = np.arange(num_to_remove)
-    
-    predicted_loss_diffs = model.get_influence_on_test_loss(
-        test_idx, 
-        indices_to_remove,
-        force_refresh=True)
+
+    if approx_type=='cg':
+        predicted_loss_diffs = model.get_influence_on_test_loss(
+            test_idx,
+            indices_to_remove,
+            force_refresh=True)
+    elif approx_type == 'lissa':
+        predicted_loss_diffs = model.get_influence_on_test_loss(
+            [test_idx],
+            indices_to_remove,
+            approx_type = 'lissa',
+            approx_params = approx_params)
+    else:
+        raise ValueError('Approximation parameters does not match available types')
 
     # If the predicted difference in loss is high (very positive) after removal,
     # that means that the point helped it to be correct.
-    top_k = 10
+
     helpful_points = np.argsort(predicted_loss_diffs)[-top_k:][::-1]
     unhelpful_points = np.argsort(predicted_loss_diffs)[:top_k]
 
@@ -87,7 +100,7 @@ def viz_top_influential_examples(model, test_idx):
 
 def test_retraining(model, test_idx, iter_to_load, force_refresh=False, 
                     num_to_remove=50, num_steps=1000, random_seed=17,
-                    remove_type='random'):
+                    remove_type='random', approx_type='cg', approx_params=None):
 
     np.random.seed(random_seed)
 
@@ -98,23 +111,73 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
     y_test = model.data_sets.test.labels[test_idx]
     print('Test label: %s' % y_test)
 
+    if approx_type=='cg':
     ## Or, randomly remove training examples
-    if remove_type == 'random':
-        indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
-        predicted_loss_diffs = model.get_influence_on_test_loss(
-            [test_idx], 
-            indices_to_remove,
-            force_refresh=force_refresh)
-    ## Or, remove the most influential training examples
-    elif remove_type == 'maxinf':    
-        predicted_loss_diffs = model.get_influence_on_test_loss(
-            [test_idx], 
-            np.arange(len(model.data_sets.train.labels)),
-            force_refresh=force_refresh)
-        indices_to_remove = np.argsort(np.abs(predicted_loss_diffs))[-num_to_remove:]
-        predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+        if remove_type == 'random':
+            indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                indices_to_remove,
+                force_refresh=force_refresh)
+        ## Or, remove the most influential training examples
+        elif remove_type == 'posinf':
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                np.arange(len(model.data_sets.train.labels)),
+                force_refresh=force_refresh)
+            indices_to_remove = np.argsort(predicted_loss_diffs)[-num_to_remove:]
+            indices_to_keep = np.argsort(predicted_loss_diffs)[:-num_to_remove]
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+        elif remove_type == 'neginf':
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                np.arange(len(model.data_sets.train.labels)),
+                force_refresh=force_refresh)
+            indices_to_remove = np.argsort(predicted_loss_diffs)[:num_to_remove]
+            indices_to_keep = np.argsort(predicted_loss_diffs)[num_to_remove:]
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+
+        else:
+            raise ValueError('remove_type not well specified')
+
+    elif approx_type == 'lissa':
+        if remove_type == 'random':
+            indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                indices_to_remove,
+                approx_type='lissa',
+                force_refresh=force_refresh,
+                approx_params=approx_params
+            )
+        ## Or, remove the most influential training examples
+        elif remove_type == 'posinf':
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                np.arange(len(model.data_sets.train.labels)),
+                approx_type='lissa',
+                force_refresh=force_refresh,
+                approx_params=approx_params
+            )
+            indices_to_remove = np.argsort(predicted_loss_diffs)[-num_to_remove:]
+            indices_to_keep = np.argsort(predicted_loss_diffs)[:-num_to_remove]
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+        elif remove_type == 'neginf':
+            predicted_loss_diffs = model.get_influence_on_test_loss(
+                [test_idx],
+                np.arange(len(model.data_sets.train.labels)),
+                approx_type='lissa',
+                approx_params=approx_params,
+                force_refresh=force_refresh)
+            indices_to_remove = np.argsort(predicted_loss_diffs)[:num_to_remove]
+            indices_to_keep = np.argsort(predicted_loss_diffs)[num_to_remove:]
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+
+        else:
+            raise ValueError('remove_type not well specified')
     else:
-        raise ValueError('remove_type not well specified')
+        raise ValueError('Approximation parameters does not match available types')
+
     actual_loss_diffs = np.zeros([num_to_remove])
 
     # Sanity check
@@ -123,16 +186,17 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
         test_idx)    
     test_loss_val, params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
     train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
-    # train_loss_val = model.minibatch_mean_eval([model.total_loss], model.data_sets.train)[0]
 
-    model.retrain(num_steps=num_steps, feed_dict=model.all_train_feed_dict)
+    retrain_feed_dict = model.fill_feed_dict_with_some_ex(model.data_sets.train, indices_to_keep)
+
+    #model.retrain(num_steps=num_steps, feed_dict=model.all_train_feed_dict)
+    model.retrain(num_steps=num_steps, feed_dict=retrain_feed_dict)
     retrained_test_loss_val = sess.run(model.loss_no_reg, feed_dict=test_feed_dict)
     retrained_train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
     # retrained_train_loss_val = model.minibatch_mean_eval([model.total_loss], model.data_sets.train)[0]
 
     model.load_checkpoint(iter_to_load, do_checks=False)
 
-    print('Sanity check: what happens if you train the model a bit more?')
     print('Loss on test idx with original model    : %s' % test_loss_val)
     print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
     print('Difference in test loss after retraining     : %s' % (retrained_test_loss_val - test_loss_val))
@@ -141,12 +205,11 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
     print('Total loss on training with retrained model   : %s' % retrained_train_loss_val)
     print('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val))
     
-    print('These differences should be close to 0.\n')
 
     # Retraining experiment
     for counter, idx_to_remove in enumerate(indices_to_remove):
 
-        print("=== #%s ===" % counter)
+        print("=== #%s ===" % (counter+1))
         print('Retraining without train_idx %s (label %s):' % (idx_to_remove, model.data_sets.train.labels[idx_to_remove]))
 
         train_feed_dict = model.fill_feed_dict_with_all_but_one_ex(model.data_sets.train, idx_to_remove)

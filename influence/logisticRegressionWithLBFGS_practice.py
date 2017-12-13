@@ -71,8 +71,70 @@ class LogisticRegressionWithLBFGS(GenericNeuralNet):
     def inference(self, input):
         with tf.variables_scope('softmax_linear'):
             weights = variable_with_weight_decay(
-                'weights',
-                [self.input_di]
-            )
+                name='weights',
+                shape=[self.input_dim*self.num_classes],
+                stddev=1.0 / math.sqrt(float(self.input_dim)),
+                wd=self.weight_decay)
+            logits = tf.matmul(input, tf.reshape(weights, [self.input_dim, self.num_classes]))
+        self.weights = weights
+        return logits
+
+    def predictions(self, logits):
+        preds = tf.nn.softmax(logits, name='preds')
+        return preds
+
+    def set_params(self):
+        self.W_placeholder = tf.placeholder(
+            tf.float32,
+            shape = [self.input_dim * self.num_classes],
+            name='W_placeholder'
+        )
+        set_weights = tf.assign(self.weights, self.W_placeholder, validate_shape=True)
+        return [set_weights]
+
+    def retrain(self, num_steps, feed_dict):
+        self.train_with_LBFGS(
+            feed_dict = feed_dict,
+            save_checkpoints = False,
+            verbose = False)
+
+    def train(self, num_steps = None,
+              iter_to_switch_to_batch = None,
+              iter_to_switch_to_sgd = None,
+              save_checkpoints = True,
+              verbose = True):
+        self.train_with_LBFGS(
+            feed_dict = self.all_train_feed_dict,
+            save_checkpoints = save_checkpoints,
+            verbose = verbose)
+
+    def train_with_LBFGS(self, feed_dict, save_checkpoints = True, verbose = True):
+        X_train = feed_dict[self.input_placeholder]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -26,12 +26,15 @@ batch_size = 500
 
 initial_learning_rate = 0.0001 
 decay_epochs = [10000, 20000]
-hidden1_units = 8
-hidden2_units = 8
-hidden3_units = 8
+hidden1_units = 3
+hidden2_units = 3
+hidden3_units = 3
 conv_patch_size = 3
 keep_probs = [1.0, 1.0]
+remove_type = 'neginf'
+num_steps = 500000
 
+tf.reset_default_graph()
 
 model = All_CNN_C(
     input_side=input_side, 
@@ -52,23 +55,26 @@ model = All_CNN_C(
     log_dir='log',
     model_name='mnist_small_all_cnn_c')
 
-num_steps = 500000
 model.train(
-    num_steps=num_steps, 
+    num_steps=num_steps,
     iter_to_switch_to_batch=10000000,
     iter_to_switch_to_sgd=10000000)
 iter_to_load = num_steps - 1
+# model.load_checkpoint(iter_to_load)
+
+
 
 test_idx = 6558
-
 actual_loss_diffs, predicted_loss_diffs, indices_to_remove = experiments.test_retraining(
-    model, 
-    test_idx=test_idx, 
-    iter_to_load=iter_to_load, 
+    model,
+    test_idx=test_idx,
+    iter_to_load=iter_to_load,
     num_to_remove=100,
-    num_steps=30000, 
-    remove_type='maxinf',
-    force_refresh=True)
+    remove_type=remove_type,
+    force_refresh=False,
+    approx_type='lissa',
+    approx_params={'batch_size':1}
+)
 
 np.savez(
     'output/mnist_small_all_cnn_c_iter-500k_retraining-100.npz', 
