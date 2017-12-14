@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import numpy as np
 import IPython
+import os
 
 import tensorflow as tf
 
@@ -26,13 +27,14 @@ batch_size = 500
 
 initial_learning_rate = 0.0001 
 decay_epochs = [10000, 20000]
-hidden1_units = 3
-hidden2_units = 3
-hidden3_units = 3
+hidden1_units = 2
+hidden2_units = 2
+hidden3_units = 2
 conv_patch_size = 3
 keep_probs = [1.0, 1.0]
 remove_type = 'neginf'
-num_steps = 500000
+approx_type = 'lissa'
+num_steps = 50000
 
 tf.reset_default_graph()
 
@@ -55,26 +57,38 @@ model = All_CNN_C(
     log_dir='log',
     model_name='mnist_small_all_cnn_c')
 
-model.train(
-    num_steps=num_steps,
-    iter_to_switch_to_batch=10000000,
-    iter_to_switch_to_sgd=10000000)
 iter_to_load = num_steps - 1
-# model.load_checkpoint(iter_to_load)
 
+try:
+    model.load_checkpoint(iter_to_load)
+except:
+    model.train(num_steps=num_steps,
+                iter_to_switch_to_batch=10000000,
+                iter_to_switch_to_sgd=10000000)
 
 
 test_idx = 6558
-actual_loss_diffs, predicted_loss_diffs, indices_to_remove = experiments.test_retraining(
-    model,
-    test_idx=test_idx,
-    iter_to_load=iter_to_load,
-    num_to_remove=100,
-    remove_type=remove_type,
-    force_refresh=False,
-    approx_type='lissa',
-    approx_params={'batch_size':1}
-)
+if approx_type == 'lissa':
+    actual_loss_diffs, predicted_loss_diffs, indices_to_remove = experiments.test_retraining(
+        model,
+        test_idx=test_idx,
+        iter_to_load=iter_to_load,
+        num_to_remove=100,
+        remove_type=remove_type,
+        force_refresh=True,
+        approx_type='lissa',
+        approx_params={'batch_size':1})
+elif approx_type == 'cg':
+    actual_loss_diffs, predicted_loss_diffs, indices_to_remove = experiments.test_retraining(
+        model,
+        test_idx = test_idx,
+        iter_to_load = iter_to_load,
+        num_to_remove=100,
+        remove_type=remove_type,
+        num_steps=3000,
+        force_refresh=True)
+else:
+    raise ValueError('Approximation type not available')
 
 np.savez(
     'output/mnist_small_all_cnn_c_iter-500k_retraining-100.npz', 

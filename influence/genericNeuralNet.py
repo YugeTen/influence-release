@@ -428,8 +428,10 @@ class GenericNeuralNet(object):
     def load_checkpoint(self, iter_to_load, do_checks=True):
         # restore the checkpoints (model) saved at iteration specified by iter_to_load
         # and print the model evaluation at that time by calling print_model_eval()
-        checkpoint_to_load = "%s-%s" % (self.checkpoint_file, iter_to_load) 
+        checkpoint_to_load = "%s-%s" % (self.checkpoint_file, iter_to_load)
+
         self.saver.restore(self.sess, checkpoint_to_load)
+
 
         if do_checks:
             print('Model %s loaded. Sanity checks ---' % checkpoint_to_load)
