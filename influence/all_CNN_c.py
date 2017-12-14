@@ -33,7 +33,15 @@ def softplus(x):
 
 class All_CNN_C(GenericNeuralNet):
 
-    def __init__(self, input_side, input_channels, conv_patch_size, hidden1_units, hidden2_units, hidden3_units, weight_decay, **kwargs):
+    def __init__(self,
+                 input_side,
+                 input_channels,
+                 conv_patch_size,
+                 hidden1_units,
+                 hidden2_units,
+                 hidden3_units,
+                 weight_decay,
+                 **kwargs):
         self.weight_decay = weight_decay
         self.input_side = input_side
         self.input_channels = input_channels
@@ -46,17 +54,26 @@ class All_CNN_C(GenericNeuralNet):
         super(All_CNN_C, self).__init__(**kwargs)
 
 
-    def conv2d_softplus(self, input_x, conv_patch_size, input_channels, output_channels, stride):
+    def conv2d_softplus(self,
+                        input_x,
+                        conv_patch_size,
+                        input_channels,
+                        output_channels,
+                        stride):
         weights = variable_with_weight_decay(
-            'weights', 
-            [conv_patch_size * conv_patch_size * input_channels * output_channels],
+            name='weights',
+            shape=[conv_patch_size * conv_patch_size * input_channels * output_channels],
             stddev=2.0 / math.sqrt(float(conv_patch_size * conv_patch_size * input_channels)),
             wd=self.weight_decay)
         biases = variable(
-            'biases',
-            [output_channels],
-            tf.constant_initializer(0.0))
-        weights_reshaped = tf.reshape(weights, [conv_patch_size, conv_patch_size, input_channels, output_channels])
+            name='biases',
+            shape=[output_channels],
+            initializer=tf.constant_initializer(0.0))
+        weights_reshaped = tf.reshape(weights,
+                                      [conv_patch_size,
+                                       conv_patch_size,
+                                       input_channels,
+                                       output_channels])
         hidden = tf.nn.tanh(conv2d(input_x, weights_reshaped, stride) + biases)
 
         return hidden
@@ -67,14 +84,16 @@ class All_CNN_C(GenericNeuralNet):
         all_params = []
         for layer in ['h1_a', 'h1_c', 'h2_a', 'h2_c', 'h3_a', 'h3_c', 'softmax_linear']:        
             for var_name in ['weights', 'biases']:
-                temp_tensor = tf.get_default_graph().get_tensor_by_name("%s/%s:0" % (layer, var_name))            
+                temp_tensor = tf.get_default_graph().get_tensor_by_name(
+                    "%s/%s:0" % (layer, var_name))
                 all_params.append(temp_tensor)      
         return all_params        
         
 
     def retrain(self, num_steps, feed_dict):        
 
-        retrain_dataset = DataSet(feed_dict[self.input_placeholder], feed_dict[self.labels_placeholder])
+        retrain_dataset = DataSet(feed_dict[self.input_placeholder],
+                                  feed_dict[self.labels_placeholder])
 
         for step in range(num_steps):   
             iter_feed_dict = self.fill_feed_dict_with_batch(retrain_dataset)
