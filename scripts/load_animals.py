@@ -38,7 +38,7 @@ def extract_and_rename_animals():
     for class_string, class_id in class_maps:
         
         class_dir = os.path.join(BASE_DIR, class_string)
-        print(class_dir)
+        #print(class_dir)
         call('mkdir %s' % class_dir, shell=True)
         call('tar -xf %s.tar -C %s' % (os.path.join(BASE_DIR, class_id), class_dir), shell=True)
         
@@ -111,11 +111,10 @@ def load_animals(num_train_ex_per_class=300,
             num_filled = 0
             while num_filled < num_train_ex_per_class:        
                 img_path = os.path.join(BASE_DIR, '%s/%s_%s.JPEG' % (class_string, class_string, i))
-                print(img_path)
                 if os.path.exists(img_path):
                     fill(X_train, Y_train, num_filled + (num_train_ex_per_class * class_idx), class_idx, img_path, img_side)
                     num_filled += 1
-                    print(num_filled)
+                    #print(num_filled)
                 i += 1
 
             num_filled = 0
@@ -124,7 +123,7 @@ def load_animals(num_train_ex_per_class=300,
                 if os.path.exists(img_path):
                     fill(X_test, Y_test, num_filled + (num_test_ex_per_class * class_idx), class_idx, img_path, img_side)
                     num_filled += 1
-                    print(num_filled)
+                    #print(num_filled)
                 i += 1
 
             num_filled = 0

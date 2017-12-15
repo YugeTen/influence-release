@@ -5,34 +5,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ac5f703-aaea-4313-830e-54aeba951a1a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/influence/all_CNN_c_practice.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-199999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-199999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-199999.meta" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-299999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-299999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-299999.meta" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-399999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-399999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-399999.meta" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-4999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-4999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-4999.meta" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-499999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-499999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-499999.meta" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-99999.data-00000-of-00001" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-99999.index" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-99999.meta" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/load_cifar10.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/train_animal_logreg.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/train_cifar10_logreg.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/components_results.npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/dogfish_rbf_hinge_t-0-checkpoint-0.data-00000-of-00001" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/dogfish_rbf_hinge_t-0-checkpoint-0.index" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/dogfish_rbf_hinge_t-0-checkpoint-0.meta" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/dogfish_rbf_hinge_t-0.001-cg-normal_loss-test-[120, 462].npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/dogfish_rbf_hinge_t-0.001-cg-normal_loss-test-[462].npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist-17_logreg-cg-normal_loss-test-[30].npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist-17_logreg-checkpoint-0.data-00000-of-00001" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist-17_logreg-checkpoint-0.index" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist-17_logreg-checkpoint-0.meta" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-cg-normal_loss-test-[123].npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs_loss_diffs.npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs_retraining-500.npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.data-00000-of-00001" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.index" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.meta" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c_iter-500k_retraining-100.npz" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c_loss_diffs.npz" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-cg-normal_loss-test-[8].npz" afterPath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-cg-normal_loss-test-[8].npz" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.data-00000-of-00001" afterPath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.data-00000-of-00001" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.index" afterPath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.index" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.meta" afterPath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-checkpoint-0.meta" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-lissa-normal_loss-test-[8].npz" afterPath="$PROJECT_DIR$/scripts/output/mnist_logreg_lbfgs-lissa-normal_loss-test-[8].npz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.data-00000-of-00001" afterPath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.data-00000-of-00001" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.index" afterPath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.index" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.meta" afterPath="$PROJECT_DIR$/scripts/output/mnist_small_all_cnn_c-checkpoint-49999.meta" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/influence/all_CNN_c.py" afterPath="$PROJECT_DIR$/influence/all_CNN_c.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/influence/experiments.py" afterPath="$PROJECT_DIR$/influence/experiments.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py" afterPath="$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/load_animals.py" afterPath="$PROJECT_DIR$/scripts/load_animals.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/output/checkpoint" afterPath="$PROJECT_DIR$/scripts/output/checkpoint" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/train_mnist.py" afterPath="$PROJECT_DIR$/scripts/train_mnist.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/rename.py" afterPath="$PROJECT_DIR$/scripts/rename.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,40 +47,45 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/influence_release$run_rbf_comparison.coverage" NAME="run_rbf_comparison Coverage Results" MODIFIED="1512968204989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/influence_release$rename.coverage" NAME="rename Coverage Results" MODIFIED="1511911626688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/.idea" />
-    <SUITE FILE_PATH="coverage/influence_release$genericNeuralNet.coverage" NAME="genericNeuralNet Coverage Results" MODIFIED="1512953237477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/influence" />
+    <SUITE FILE_PATH="coverage/influence_release$load_cifar10.coverage" NAME="load_cifar10 Coverage Results" MODIFIED="1513307802217" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$rename.coverage" NAME="rename Coverage Results" MODIFIED="1513295949086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/influence_release$experiments.coverage" NAME="experiments Coverage Results" MODIFIED="1513044259192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/influence" />
     <SUITE FILE_PATH="coverage/influence_release$run_data_poisoning.coverage" NAME="run_data_poisoning Coverage Results" MODIFIED="1513206779711" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$train_cifar10_logreg.coverage" NAME="train_cifar10_logreg Coverage Results" MODIFIED="1513315661632" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$train_mnist_logreg.coverage" NAME="train_mnist_logreg Coverage Results" MODIFIED="1513294287971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$train_mnist.coverage" NAME="train_mnist Coverage Results" MODIFIED="1513224617162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$load_animals.coverage" NAME="load_animals Coverage Results" MODIFIED="1513294332669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/influence_release$genericNeuralNet.coverage" NAME="genericNeuralNet Coverage Results" MODIFIED="1512953237477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/influence" />
+    <SUITE FILE_PATH="coverage/influence_release$train_animal_logreg.coverage" NAME="train_animal_logreg Coverage Results" MODIFIED="1513299535733" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/influence_release$run_components_experiment.coverage" NAME="run_components_experiment Coverage Results" MODIFIED="1511910807505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/influence_release$inceptionModel.coverage" NAME="inceptionModel Coverage Results" MODIFIED="1512606565842" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/influence" />
-    <SUITE FILE_PATH="coverage/influence_release$train_mnist_logreg.coverage" NAME="train_mnist_logreg Coverage Results" MODIFIED="1513221092173" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
     <SUITE FILE_PATH="coverage/influence_release$rename__1_.coverage" NAME="rename (1) Coverage Results" MODIFIED="1511912970385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/influence_release$train_mnist.coverage" NAME="train_mnist Coverage Results" MODIFIED="1513224617162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4167116">
+    <splitter split-orientation="horizontal" split-proportion="0.5126685">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="logisticRegressionWithLBFGS.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py">
+          <file leaf-file-name="load_animals.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/scripts/load_animals.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="774">
-                  <caret line="145" column="40" lean-forward="false" selection-start-line="145" selection-start-column="40" selection-end-line="145" selection-end-column="40" />
+                <state relative-caret-position="501">
+                  <caret line="168" column="21" lean-forward="false" selection-start-line="168" selection-start-column="21" selection-end-line="168" selection-end-column="21" />
                   <folding>
-                    <element signature="e#1#32#0" expanded="true" />
+                    <element signature="e#0#9#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="train_mnist_logreg.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/scripts/train_mnist_logreg.py">
+          <file leaf-file-name="load_animals_practice.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/load_animals_practice.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="128">
-                  <caret line="47" column="24" lean-forward="true" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+                <state relative-caret-position="180">
+                  <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
                   <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                    <marker date="1513141942089" expanded="true" signature="1526:1587" ph="..." />
+                    <element signature="e#0#9#0" expanded="true" />
+                    <element signature="e#3844#4169#0" expanded="false" />
+                    <element signature="e#4189#6119#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -85,7 +94,7 @@
           <file leaf-file-name="all_CNN_c.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/influence/all_CNN_c.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="706">
+                <state relative-caret-position="549">
                   <caret line="154" column="101" lean-forward="false" selection-start-line="154" selection-start-column="101" selection-end-line="154" selection-end-column="101" />
                   <folding>
                     <element signature="e#0#31#0" expanded="true" />
@@ -94,13 +103,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="run_data_poisoning.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/run_data_poisoning.py">
+          <file leaf-file-name="genericNeuralNet.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="234">
-                  <caret line="58" column="35" lean-forward="false" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="35" />
+                <state relative-caret-position="195">
+                  <caret line="241" column="8" lean-forward="false" selection-start-line="241" selection-start-column="8" selection-end-line="241" selection-end-column="8" />
                   <folding>
-                    <element signature="e#0#14#0" expanded="true" />
+                    <element signature="e#0#31#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -110,9 +119,43 @@
             <entry file="file://$PROJECT_DIR$/scripts/train_mnist.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="432">
-                  <caret line="66" column="47" lean-forward="true" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
+                  <caret line="66" column="47" lean-forward="false" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
                   <folding>
                     <element signature="e#0#31#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="experiments.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/influence/experiments.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="178" column="0" lean-forward="false" selection-start-line="178" selection-start-column="0" selection-end-line="181" selection-end-column="40" />
+                  <folding>
+                    <element signature="e#0#18#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="binaryLogisticRegressionWithLBFGS.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/influence/binaryLogisticRegressionWithLBFGS.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="275">
+                  <caret line="86" column="58" lean-forward="false" selection-start-line="86" selection-start-column="58" selection-end-line="86" selection-end-column="58" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="load_mnist.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/load_mnist.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="504">
+                  <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+                  <folding>
+                    <element signature="e#125#136#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -122,84 +165,48 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="all_CNN_c_practice.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/influence/all_CNN_c_practice.py">
+          <file leaf-file-name="load_cifar10.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/load_cifar10.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="819">
-                  <caret line="91" column="56" lean-forward="false" selection-start-line="91" selection-start-column="56" selection-end-line="91" selection-end-column="56" />
-                  <folding>
-                    <element signature="e#0#79#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="experiments.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/influence/experiments.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1573">
-                  <caret line="183" column="25" lean-forward="true" selection-start-line="183" selection-start-column="25" selection-end-line="183" selection-end-column="25" />
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="genericNeuralNet.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="654">
-                  <caret line="583" column="80" lean-forward="true" selection-start-line="583" selection-start-column="80" selection-end-line="583" selection-end-column="80" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="inceptionModel.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/influence/inceptionModel.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="204">
-                  <caret line="70" column="15" lean-forward="false" selection-start-line="70" selection-start-column="8" selection-end-line="70" selection-end-column="15" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="run_rbf_comparison.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/run_rbf_comparison.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-967">
-                  <caret line="185" column="29" lean-forward="false" selection-start-line="185" selection-start-column="29" selection-end-line="185" selection-end-column="29" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="run_components_experiment.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/run_components_experiment.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1134">
-                  <caret line="80" column="39" lean-forward="false" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="39" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="load_animals.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/load_animals.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-11">
-                  <caret line="131" column="5" lean-forward="false" selection-start-line="131" selection-start-column="5" selection-end-line="131" selection-end-column="5" />
+                <state relative-caret-position="252">
+                  <caret line="83" column="51" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#9#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="train_animal_logreg.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/train_animal_logreg.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="828">
+                  <caret line="67" column="28" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="94" selection-end-column="5" />
+                  <folding>
+                    <element signature="e#0#31#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="train_cifar10_logreg.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/scripts/train_cifar10_logreg.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="432">
+                  <caret line="33" column="19" lean-forward="false" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+                  <folding>
+                    <element signature="e#0#31#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="rename.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/rename.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="414">
+                  <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -217,7 +224,7 @@
           <file leaf-file-name="load_spam.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/load_spam.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="547">
+                <state relative-caret-position="972">
                   <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
                   <folding />
                 </state>
@@ -237,9 +244,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>placeholder_inputs</find>
-      <find>def pre</find>
-      <find>v_place</find>
       <find>vec_to_list</find>
       <find>print_model_eval</find>
       <find>%s</find>
@@ -252,7 +256,6 @@
       <find>predicted loss</find>
       <find>462</find>
       <find>test_idx</find>
-      <find>predicted loss</find>
       <find>normalize</find>
       <find>:</find>
       <find>:param</find>
@@ -267,6 +270,10 @@
       <find>Predicted influence of train_idx</find>
       <find>koda</find>
       <find>get_influence_on</find>
+      <find>npz</find>
+      <find>zip</find>
+      <find>mnist</find>
+      <find>base</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -287,8 +294,6 @@
         <option value="$PROJECT_DIR$/influence/hessian.py" />
         <option value="$PROJECT_DIR$/influence/hessians_practice.py" />
         <option value="$PROJECT_DIR$/scripts/.idea/rename.py" />
-        <option value="$PROJECT_DIR$/scripts/rename.py" />
-        <option value="$PROJECT_DIR$/scripts/load_animals.py" />
         <option value="$PROJECT_DIR$/influence/inception_v3.py" />
         <option value="$PROJECT_DIR$/influence/inceptionModel.py" />
         <option value="$PROJECT_DIR$/influence/smooth_hinge.py" />
@@ -298,14 +303,19 @@
         <option value="$PROJECT_DIR$/influence/dataset.py" />
         <option value="$PROJECT_DIR$/influence/dataset_practice.py" />
         <option value="$PROJECT_DIR$/influence/logisticRegressionWithLBFGS_practice.py" />
-        <option value="$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py" />
-        <option value="$PROJECT_DIR$/influence/experiments.py" />
         <option value="$PROJECT_DIR$/scripts/train_mnist_logreg.py" />
         <option value="$PROJECT_DIR$/influence/genericNeuralNet.py" />
         <option value="$PROJECT_DIR$/scripts/train_mnist.py" />
         <option value="$PROJECT_DIR$/scripts/.idea/train_mnist_practice.py" />
         <option value="$PROJECT_DIR$/influence/all_CNN_c.py" />
         <option value="$PROJECT_DIR$/influence/all_CNN_c_practice.py" />
+        <option value="$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py" />
+        <option value="$PROJECT_DIR$/scripts/rename.py" />
+        <option value="$PROJECT_DIR$/scripts/train_animal_logreg.py" />
+        <option value="$PROJECT_DIR$/influence/experiments.py" />
+        <option value="$PROJECT_DIR$/scripts/load_animals.py" />
+        <option value="$PROJECT_DIR$/scripts/load_cifar10.py" />
+        <option value="$PROJECT_DIR$/scripts/train_cifar10_logreg.py" />
       </list>
     </option>
   </component>
@@ -355,7 +365,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.train_mnist">
+  <component name="RunManager" selected="Python.train_cifar10_logreg">
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
       <node-interpreter>project</node-interpreter>
       <node-options />
@@ -503,25 +513,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <configuration name="experiments" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/influence" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="influence-release" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/influence/experiments.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="run_data_poisoning" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="load_animals" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -534,12 +526,12 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="influence-release" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/run_data_poisoning.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/load_animals.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="run_rbf_comparison" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="load_cifar10" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -552,12 +544,12 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="influence-release" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/run_rbf_comparison.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/load_cifar10.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="train_mnist" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="rename" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -570,12 +562,12 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="influence-release" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/train_mnist.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/rename.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="train_mnist_logreg" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="train_animal_logreg" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -588,25 +580,43 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="influence-release" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/train_mnist_logreg.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/train_animal_logreg.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="train_cifar10_logreg" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="influence-release" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/train_cifar10_logreg.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.run_rbf_comparison" />
-      <item index="1" class="java.lang.String" itemvalue="Python.experiments" />
-      <item index="2" class="java.lang.String" itemvalue="Python.train_mnist_logreg" />
-      <item index="3" class="java.lang.String" itemvalue="Python.train_mnist" />
-      <item index="4" class="java.lang.String" itemvalue="Python.run_data_poisoning" />
+      <item index="0" class="java.lang.String" itemvalue="Python.train_animal_logreg" />
+      <item index="1" class="java.lang.String" itemvalue="Python.load_animals" />
+      <item index="2" class="java.lang.String" itemvalue="Python.rename" />
+      <item index="3" class="java.lang.String" itemvalue="Python.load_cifar10" />
+      <item index="4" class="java.lang.String" itemvalue="Python.train_cifar10_logreg" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.train_mnist" />
-        <item index="1" class="java.lang.String" itemvalue="Python.train_mnist_logreg" />
-        <item index="2" class="java.lang.String" itemvalue="Python.run_data_poisoning" />
-        <item index="3" class="java.lang.String" itemvalue="Python.experiments" />
-        <item index="4" class="java.lang.String" itemvalue="Python.run_rbf_comparison" />
+        <item index="0" class="java.lang.String" itemvalue="Python.train_cifar10_logreg" />
+        <item index="1" class="java.lang.String" itemvalue="Python.load_cifar10" />
+        <item index="2" class="java.lang.String" itemvalue="Python.train_animal_logreg" />
+        <item index="3" class="java.lang.String" itemvalue="Python.rename" />
+        <item index="4" class="java.lang.String" itemvalue="Python.load_animals" />
       </list>
     </recent_temporary>
   </component>
@@ -628,17 +638,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <editor active="true" />
     <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.240625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" show_stripe_button="true" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="946" y="193" width="627" height="767" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38445807" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.240625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32822084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" show_stripe_button="true" weight="0.32911393" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="372" y="175" width="627" height="559" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34560326" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -648,6 +658,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934132" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32822084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -681,53 +692,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/load_mnist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/load_animals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/run_data_poisoning_indiv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/run_spam_experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/run_rbf_comparison.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/run_data_poisoning_multiple.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -743,13 +712,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/influence/image_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/load_mnist.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -777,33 +739,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/tensorflow/contrib/learn/python/learn/datasets/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-54">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/influence/nlprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments_practice.py" />
     <entry file="file://$PROJECT_DIR$/influence/hessian.py" />
-    <entry file="file://$PROJECT_DIR$/scripts/load_animals_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3456">
-          <caret line="199" column="21" lean-forward="false" selection-start-line="199" selection-start-column="21" selection-end-line="199" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.5/dist-packages/tensorflow/python/ops/gen_array_ops.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
@@ -812,20 +756,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/influence/hessians_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1854">
-          <caret line="103" column="0" lean-forward="true" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/hessians_practice.py" />
     <entry file="file://$PROJECT_DIR$/influence/binaryLogisticRegressionWithLBFGS_practice.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#82#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -833,16 +768,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/rename.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="864">
-          <caret line="75" column="31" lean-forward="false" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#64#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -854,17 +779,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/run_spam_experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="23" column="20" lean-forward="false" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/load_spam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
+        <state relative-caret-position="972">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
@@ -890,7 +807,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
           <caret line="268" column="0" lean-forward="false" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -910,42 +826,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/run_rbf_comparison.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-967">
-          <caret line="185" column="29" lean-forward="false" selection-start-line="185" selection-start-column="29" selection-end-line="185" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="825" column="0" lean-forward="true" selection-start-line="825" selection-start-column="0" selection-end-line="825" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/influence/inceptionModel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="70" column="15" lean-forward="false" selection-start-line="70" selection-start-column="8" selection-end-line="70" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/influence/dataset_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet_practice.py" />
+    <entry file="file://$PROJECT_DIR$/influence/dataset_practice.py" />
     <entry file="file://$PROJECT_DIR$/influence/hessians.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-535">
@@ -972,39 +854,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/influence/binaryLogisticRegressionWithLBFGS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="28" column="8" lean-forward="false" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.local/lib/python3.5/site-packages/sklearn/linear_model/logistic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="1155" column="59" lean-forward="true" selection-start-line="1155" selection-start-column="59" selection-end-line="1155" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/influence/dataset_poisoning.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
           <caret line="46" column="40" lean-forward="false" selection-start-line="46" selection-start-column="40" selection-end-line="46" selection-end-column="40" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="145" column="40" lean-forward="false" selection-start-line="145" selection-start-column="40" selection-end-line="145" selection-end-column="40" />
-          <folding>
-            <element signature="e#1#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1020,7 +874,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/run_data_poisoning.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
+        <state relative-caret-position="756">
           <caret line="58" column="35" lean-forward="false" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="35" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
@@ -1028,28 +882,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/load_animals.py">
+    <entry file="file://$PROJECT_DIR$/scripts/.idea/train_mnist_practice.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/numpy/lib/npyio.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11">
-          <caret line="131" column="5" lean-forward="false" selection-start-line="131" selection-start-column="5" selection-end-line="131" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/.idea/train_mnist_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state relative-caret-position="-296">
+          <caret line="265" column="4" lean-forward="false" selection-start-line="265" selection-start-column="4" selection-end-line="265" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/influence/all_CNN_c.py">
+    <entry file="file://$PROJECT_DIR$/scripts/train_mnist_logreg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="706">
-          <caret line="154" column="101" lean-forward="false" selection-start-line="154" selection-start-column="101" selection-end-line="154" selection-end-column="101" />
+        <state relative-caret-position="108">
+          <caret line="65" column="63" lean-forward="false" selection-start-line="65" selection-start-column="63" selection-end-line="65" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <marker date="1513141942089" expanded="true" signature="1526:1587" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.local/lib/python3.5/site-packages/sklearn/linear_model/logistic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="1155" column="8" lean-forward="false" selection-start-line="1155" selection-start-column="8" selection-end-line="1155" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/rename.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="74" column="0" lean-forward="false" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/logisticRegressionWithLBFGS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="28" column="8" lean-forward="false" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/train_mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="66" column="47" lean-forward="false" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -1058,49 +938,152 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/influence/all_CNN_c_practice.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
+        <state relative-caret-position="162">
           <caret line="91" column="56" lean-forward="false" selection-start-line="91" selection-start-column="56" selection-end-line="91" selection-end-column="56" />
           <folding>
-            <element signature="e#0#79#0" expanded="true" />
+            <element signature="e#0#79#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/inceptionModel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="70" column="15" lean-forward="false" selection-start-line="70" selection-start-column="8" selection-end-line="70" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#31#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/run_rbf_comparison.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="185" column="29" lean-forward="false" selection-start-line="185" selection-start-column="29" selection-end-line="185" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#31#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/binaryLogisticRegressionWithLBFGS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="86" column="58" lean-forward="false" selection-start-line="86" selection-start-column="58" selection-end-line="86" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="241" column="8" lean-forward="false" selection-start-line="241" selection-start-column="8" selection-end-line="241" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/influence/all_CNN_c.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="154" column="101" lean-forward="false" selection-start-line="154" selection-start-column="101" selection-end-line="154" selection-end-column="101" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/influence/experiments.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1573">
-          <caret line="183" column="25" lean-forward="true" selection-start-line="183" selection-start-column="25" selection-end-line="183" selection-end-column="25" />
+        <state relative-caret-position="180">
+          <caret line="178" column="0" lean-forward="false" selection-start-line="178" selection-start-column="0" selection-end-line="181" selection-end-column="40" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/train_mnist.py">
+    <entry file="file://$PROJECT_DIR$/scripts/load_mnist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+          <folding>
+            <element signature="e#125#136#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/load_animals_practice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#3844#4169#0" expanded="false" />
+            <element signature="e#4189#6119#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/load_cifar10.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="83" column="51" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/run_spam_experiment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="23" column="20" lean-forward="false" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/train_animal_logreg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="67" column="28" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="94" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.5/collections/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-121">
+          <caret line="355" column="4" lean-forward="false" selection-start-line="355" selection-start-column="4" selection-end-line="355" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/tensorflow/contrib/learn/python/learn/datasets/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="36" column="30" lean-forward="false" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/load_animals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="168" column="21" lean-forward="false" selection-start-line="168" selection-start-column="21" selection-end-line="168" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/train_cifar10_logreg.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
-          <caret line="66" column="47" lean-forward="true" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/train_mnist_logreg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="47" column="24" lean-forward="true" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <marker date="1513141942089" expanded="true" signature="1526:1587" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/influence/genericNeuralNet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="654">
-          <caret line="583" column="80" lean-forward="true" selection-start-line="583" selection-start-column="80" selection-end-line="583" selection-end-column="80" />
+          <caret line="33" column="19" lean-forward="false" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

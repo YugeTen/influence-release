@@ -100,7 +100,7 @@ def viz_top_influential_examples(model,
 
 def test_retraining(model, test_idx, iter_to_load, force_refresh=False, 
                     num_to_remove=50, num_steps=1000, random_seed=17,
-                    remove_type='random', approx_type='cg', approx_params=None):
+                    remove_type='random', approx_type='cg', approx_params=None, display=True):
 
     np.random.seed(random_seed)
 
@@ -108,8 +108,6 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
     sess = model.sess
 
     
-    y_test = model.data_sets.test.labels[test_idx]
-    print('Test label: %s' % y_test)
 
     if approx_type=='cg':
     ## Or, randomly remove training examples
@@ -139,7 +137,10 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
 
         else:
             raise ValueError('remove_type not well specified')
-
+        if display:
+            print('Remove type is <%s>, with testing index %s and top 3 '
+                  'removed indices are:' % (remove_type, test_idx))
+            print(indices_to_remove[:3])
     elif approx_type == 'lissa':
         if remove_type == 'random':
             indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
@@ -175,6 +176,10 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
 
         else:
             raise ValueError('remove_type not well specified')
+        if display:
+            print('Remove type is <%s>, with testing index %s and top 3 '
+                  'removed indices are:' % (remove_type, test_idx))
+            print(indices_to_remove[:3])
     else:
         raise ValueError('Approximation parameters does not match available types')
 
