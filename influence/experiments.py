@@ -4,7 +4,7 @@ import time
 
 import IPython
 from scipy.stats import pearsonr
-
+import matplotlib.pyplot as plt
 
 def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
     def try_check(idx_to_check, label):
@@ -140,7 +140,19 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
         if display:
             print('Remove type is <%s>, with testing index %s and top 3 '
                   'removed indices are:' % (remove_type, test_idx))
-            print(indices_to_remove[:3])
+            plt.figure()
+            subplot_numbering = 221
+            for idx in indices_to_remove[:3]:
+                img = model.data_sets.train.x[idx].reshape(32,32,3)
+                plt.subplot(subplot_numbering)
+                plt.title("class %s" % model.data_sets.train.labels[idx])
+                plt.imshow(img)
+                subplot_numbering += 1
+
+            plt.subplot(subplot_numbering)
+            plt.title("class %s" % model.data_sets.test.labels[test_idx])
+            plt.imshow(model.data_sets.test.x[test_idx].reshape(32,32,3))
+            plt.show()
     elif approx_type == 'lissa':
         if remove_type == 'random':
             indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
@@ -179,7 +191,19 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
         if display:
             print('Remove type is <%s>, with testing index %s and top 3 '
                   'removed indices are:' % (remove_type, test_idx))
-            print(indices_to_remove[:3])
+            plt.figure()
+            subplot_numbering = 221
+            for idx in indices_to_remove[:3]:
+                img = model.data_sets.train.x[idx].reshape(32,32,3)
+                plt.subplot(subplot_numbering)
+                plt.title("class %s" % model.data_sets.train.labels[idx])
+                plt.imshow(img)
+                subplot_numbering += 1
+
+            plt.subplot(subplot_numbering)
+            plt.title("class %s" % model.data_sets.test.labels[test_idx])
+            plt.imshow(model.data_sets.test.x[test_idx].reshape(32,32,3))
+            plt.show()
     else:
         raise ValueError('Approximation parameters does not match available types')
 

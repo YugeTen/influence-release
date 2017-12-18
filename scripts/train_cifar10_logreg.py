@@ -34,7 +34,7 @@ keep_probs = None
 max_lbfgs_iter = 10000
 decay_epochs = [1000, 10000]
 num_to_remove = 50
-remove_type = 'neginf'
+remove_type = 'posinf'
 
 tf.reset_default_graph()
 
@@ -55,7 +55,7 @@ tf_model = LogisticRegressionWithLBFGS(
     model_name='cifar10_logreg_lbfgs',
     num_to_remove=num_to_remove)
 
-tf_model.train()
+# tf_model.train()
 
 test_idx = 8
 actual_loss_diffs, predicted_loss_diffs_cg, indices_to_remove = experiments.test_retraining(
