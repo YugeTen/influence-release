@@ -8,6 +8,7 @@ import pandas as pd
 
 import IPython
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 from influence.logisticRegressionWithLBFGS import LogisticRegressionWithLBFGS
 from influence.binaryLogisticRegressionWithLBFGS import BinaryLogisticRegressionWithLBFGS
@@ -17,12 +18,10 @@ from scripts.load_animals import load_animals
 from scripts.load_mnist import load_mnist
 from scripts.load_cifar10 import load_cifar10
 
+
 data_sets = load_cifar10(num_train_ex_per_class=3000,
                          num_test_ex_per_class=100)
 # size: 32x32x3
-
-
-
 
 num_classes = 10
 
@@ -34,7 +33,7 @@ keep_probs = None
 max_lbfgs_iter = 10000
 decay_epochs = [1000, 10000]
 num_to_remove = 50
-remove_type = 'posinf'
+remove_type = 'neginf'
 
 tf.reset_default_graph()
 
@@ -56,8 +55,7 @@ tf_model = LogisticRegressionWithLBFGS(
     num_to_remove=num_to_remove)
 
 # tf_model.train()
-
-test_idx = 8
+test_idx=5
 actual_loss_diffs, predicted_loss_diffs_cg, indices_to_remove = experiments.test_retraining(
     tf_model,
     test_idx=test_idx,
@@ -92,3 +90,6 @@ np.savez(
     predicted_loss_diffs_lissa=predicted_loss_diffs_lissa,
     indices_to_remove=indices_to_remove
     )
+
+
+

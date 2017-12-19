@@ -35,10 +35,10 @@ def load_cifar10(
     if classes is None:
         classes = ['airplane', 'automobile', 'bird', 'cat', 'deer',
                    'dog', 'frog', 'horse', 'ship', 'truck']
-        data_filename = os.path.join(BASE_DIR, 'dataset_train-%s_test-%s%s.npz'%
+        data_filename = os.path.join(BASE_DIR, 'cifar10_train-%s_test-%s%s.npz'%
                                      (num_train_ex_per_class, num_test_ex_per_class,valid_str))
     else:
-        data_filename = os.path.join(BASE_DIR, 'dataset_%s_train-%s_test-%s%s.npz' %
+        data_filename = os.path.join(BASE_DIR, 'cifar10_%s_train-%s_test-%s%s.npz' %
                                      ('-'.join(classes),
                                      num_train_ex_per_class,
                                      num_test_ex_per_class,
@@ -92,31 +92,32 @@ def load_cifar10(
             num_filled = 0
             while num_filled < num_ex_per_class:
                 img_path = os.path.join(BASE_DIR,
-                                        'cifar10',
-                                        class_idx_strings[num_filled]+'.png')
-                fill(X=x,
-                     Y=y,
-                     idx=num_filled+(num_ex_per_class*class_idx),
-                     label=class_idx,
-                     img_path=img_path,
-                     img_side=img_side)
-                num_filled += 1
+                                            'cifar10',
+                                            class_idx_strings[num_filled]+'.png')
+                if os.path.exists(img_path):
 
-            x, y = shuffle(x,y)
+                    fill(X=x,
+                         Y=y,
+                         idx=num_filled+(num_ex_per_class*class_idx),
+                         label=class_idx,
+                         img_path=img_path,
+                         img_side=img_side)
+                    num_filled += 1
 
-            x_train = x[0:num_train_examples, ...]
-            y_train = y[0:num_train_examples, ...]
-            x_test = x[num_train_examples:num_train_examples+num_test_examples, ...]
-            y_test = y[num_train_examples:num_train_examples+num_test_examples, ...]
-            x_valid = x[num_train_examples+num_test_examples:-1, ...]
-            y_valid = y[num_train_examples+num_test_examples:-1, ...]
-            np.savez_compressed(data_filename,
-                                x_train=x_train,
-                                y_train=y_train,
-                                x_test=x_test,
-                                y_test=y_test,
-                                x_valid=x_valid,
-                                y_valid=y_valid)
+        x, y = shuffle(x,y)
+        x_train = x[0:num_train_examples, ...]
+        y_train = y[0:num_train_examples, ...]
+        x_test = x[num_train_examples:num_train_examples+num_test_examples, ...]
+        y_test = y[num_train_examples:num_train_examples+num_test_examples, ...]
+        x_valid = x[num_train_examples+num_test_examples:-1, ...]
+        y_valid = y[num_train_examples+num_test_examples:-1, ...]
+        np.savez_compressed(data_filename,
+                            x_train=x_train,
+                            y_train=y_train,
+                            x_test=x_test,
+                            y_test=y_test,
+                            x_valid=x_valid,
+                            y_valid=y_valid)
 
     train = DataSet(x_train, y_train) # see def of DataSet in influence/dataset
     test = DataSet(x_test, y_test)

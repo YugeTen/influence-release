@@ -14,7 +14,7 @@ def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
         model.train()
         check_num = np.sum(Y_train_fixed != Y_train_flipped)
         check_loss, check_acc = model.sess.run(
-            [model.loss_no_reg, model.accuracy_op], 
+            [model.loss_no_reg, model.accuracy_op],
             feed_dict=model.all_test_feed_dict)
 
         print('%20s: fixed %3s labels. Loss %.5f. Accuracy %.3f.' % (
@@ -24,31 +24,31 @@ def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
 
 
 def test_mislabeled_detection_batch(
-    model, 
+    model,
     X_train, Y_train,
     Y_train_flipped,
-    X_test, Y_test, 
+    X_test, Y_test,
     train_losses, train_loo_influences,
-    num_flips, num_checks):    
+    num_flips, num_checks):
 
     assert num_checks > 0
 
-    num_train_examples = Y_train.shape[0] 
-    
+    num_train_examples = Y_train.shape[0]
+
     try_check = get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test)
 
-    # Pick by LOO influence    
+    # Pick by LOO influence
     idx_to_check = np.argsort(train_loo_influences)[-num_checks:]
     fixed_influence_loo_results = try_check(idx_to_check, 'Influence (LOO)')
 
     # Pick by top loss to fix
-    idx_to_check = np.argsort(np.abs(train_losses))[-num_checks:]    
+    idx_to_check = np.argsort(np.abs(train_losses))[-num_checks:]
     fixed_loss_results = try_check(idx_to_check, 'Loss')
 
     # Randomly pick stuff to fix
-    idx_to_check = np.random.choice(num_train_examples, size=num_checks, replace=False)    
+    idx_to_check = np.random.choice(num_train_examples, size=num_checks, replace=False)
     fixed_random_results = try_check(idx_to_check, 'Random')
-    
+
     return fixed_influence_loo_results, fixed_loss_results, fixed_random_results
 
 
@@ -91,128 +91,116 @@ def viz_top_influential_examples(model,
         print("Top %s training points making the loss on the test point %s:" % (top_k, message))
         for counter, idx in enumerate(points):
             print("#%s, class=%s, predicted_loss_diff=%.8f" % (
-                idx, 
-                model.data_sets.train.labels[idx], 
+                idx,
+                model.data_sets.train.labels[idx],
                 predicted_loss_diffs[idx]))
 
 
 
 
-def test_retraining(model, test_idx, iter_to_load, force_refresh=False, 
-                    num_to_remove=50, num_steps=1000, random_seed=17,
-                    remove_type='random', approx_type='cg', approx_params=None, display=True):
+def test_retraining(model,
+                    test_idx,
+                    iter_to_load,
+                    force_refresh=False,
+                    num_to_remove=50,
+                    num_steps=1000,
+                    random_seed=17,
+                    remove_type='random',
+                    approx_type='cg',
+                    approx_params=None,
+                    display=True,
+                    dataset='cifar10',
+                    img_shape=[32,32,3]):
+
+    if dataset=='cifar10':
+        class_string = ['airplane', 'automobile', 'bird', 'cat', 'deer',
+                   'dog', 'frog', 'horse', 'ship', 'truck']
+    else:
+        class_string = None
+
 
     np.random.seed(random_seed)
 
     model.load_checkpoint(iter_to_load)
     sess = model.sess
 
-    
 
-    if approx_type=='cg':
-    ## Or, randomly remove training examples
-        if remove_type == 'random':
-            indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                indices_to_remove,
-                force_refresh=force_refresh)
-        ## Or, remove the most influential training examples
-        elif remove_type == 'posinf':
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                np.arange(len(model.data_sets.train.labels)),
-                force_refresh=force_refresh)
-            indices_to_remove = np.argsort(predicted_loss_diffs)[-num_to_remove:]
-            indices_to_keep = np.argsort(predicted_loss_diffs)[:-num_to_remove]
-            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
-        elif remove_type == 'neginf':
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                np.arange(len(model.data_sets.train.labels)),
-                force_refresh=force_refresh)
-            indices_to_remove = np.argsort(predicted_loss_diffs)[:num_to_remove]
-            indices_to_keep = np.argsort(predicted_loss_diffs)[num_to_remove:]
-            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+    if remove_type == 'random':
+        indices_to_remove = np.random.choice(model.num_train_examples,
+                                             size=num_to_remove, replace=False)
+        predicted_loss_diffs = model.get_influence_on_test_loss(
+            test_indices=[test_idx],
+            train_indices=indices_to_remove,
+            approx_type=approx_type,
+            force_refresh=force_refresh,
+            approx_params=approx_params
+        )
 
-        else:
-            raise ValueError('remove_type not well specified')
-        if display:
-            print('Remove type is <%s>, with testing index %s and top 3 '
-                  'removed indices are:' % (remove_type, test_idx))
-            plt.figure()
-            subplot_numbering = 221
-            for idx in indices_to_remove[:3]:
-                img = model.data_sets.train.x[idx].reshape(32,32,3)
-                plt.subplot(subplot_numbering)
-                plt.title("class %s" % model.data_sets.train.labels[idx])
-                plt.imshow(img)
-                subplot_numbering += 1
-
-            plt.subplot(subplot_numbering)
-            plt.title("class %s" % model.data_sets.test.labels[test_idx])
-            plt.imshow(model.data_sets.test.x[test_idx].reshape(32,32,3))
-            plt.show()
-    elif approx_type == 'lissa':
-        if remove_type == 'random':
-            indices_to_remove = np.random.choice(model.num_train_examples, size=num_to_remove, replace=False)
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                indices_to_remove,
-                approx_type='lissa',
-                force_refresh=force_refresh,
-                approx_params=approx_params
-            )
-        ## Or, remove the most influential training examples
-        elif remove_type == 'posinf':
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                np.arange(len(model.data_sets.train.labels)),
-                approx_type='lissa',
-                force_refresh=force_refresh,
-                approx_params=approx_params
-            )
-            indices_to_remove = np.argsort(predicted_loss_diffs)[-num_to_remove:]
-            indices_to_keep = np.argsort(predicted_loss_diffs)[:-num_to_remove]
-            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
-        elif remove_type == 'neginf':
-            predicted_loss_diffs = model.get_influence_on_test_loss(
-                [test_idx],
-                np.arange(len(model.data_sets.train.labels)),
-                approx_type='lissa',
-                approx_params=approx_params,
-                force_refresh=force_refresh)
-            indices_to_remove = np.argsort(predicted_loss_diffs)[:num_to_remove]
-            indices_to_keep = np.argsort(predicted_loss_diffs)[num_to_remove:]
-            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
-
-        else:
-            raise ValueError('remove_type not well specified')
-        if display:
-            print('Remove type is <%s>, with testing index %s and top 3 '
-                  'removed indices are:' % (remove_type, test_idx))
-            plt.figure()
-            subplot_numbering = 221
-            for idx in indices_to_remove[:3]:
-                img = model.data_sets.train.x[idx].reshape(32,32,3)
-                plt.subplot(subplot_numbering)
-                plt.title("class %s" % model.data_sets.train.labels[idx])
-                plt.imshow(img)
-                subplot_numbering += 1
-
-            plt.subplot(subplot_numbering)
-            plt.title("class %s" % model.data_sets.test.labels[test_idx])
-            plt.imshow(model.data_sets.test.x[test_idx].reshape(32,32,3))
-            plt.show()
     else:
-        raise ValueError('Approximation parameters does not match available types')
+        predicted_loss_diffs = model.get_influence_on_test_loss(
+            test_indices=[test_idx],
+            train_indices=np.arange(len(model.data_sets.train.labels)),
+            approx_type=approx_type,
+            force_refresh=force_refresh,
+            approx_params=approx_params
+        )
+        predicted_loss_diffs_indices = np.argsort(predicted_loss_diffs)
+        if display:
+            indices_to_display = predicted_loss_diffs_indices[np.r_[:3, -3:0]]
+            predicted_loss_diffs_to_display = predicted_loss_diffs[indices_to_display]
+            print('Remove type is <%s>, with testing index %s'
+                  % (remove_type, test_idx))
+            plt.figure()
+            subplot_numbering = 331
+            for idx, loss in zip(indices_to_display, predicted_loss_diffs_to_display):
+                img = model.data_sets.train.x[idx].reshape(img_shape)
+                plt.subplot(subplot_numbering)
+                if class_string is None:
+                    plt.title("class {:d}, inf {:.2f}".format(int(model.data_sets.train.labels[idx]),
+                                                               loss))
+                else:
+                    plt.title("{:s}, inf {:.2f}".format(class_string[int(model.data_sets.train.labels[idx])],
+                                                               loss))
+                plt.axis('off')
+                plt.imshow(img)
+                subplot_numbering += 1
+
+
+            this_test_feed_dict = model.fill_feed_dict_with_one_ex(model.data_sets.test,test_idx)
+            this_test_prediction = model.sess.run([model.preds], feed_dict=this_test_feed_dict)
+            plt.subplot(subplot_numbering+1)
+
+            if class_string is None:
+                plt.title("testing image, true class {:d}, predicted class {:d}".format(int(model.data_sets.test.labels[test_idx]),
+                                                                                      np.argmax(this_test_prediction)))
+            else:
+                plt.title("testing image, true class {:s}, predicted class {:s}".format(class_string[int(model.data_sets.test.labels[test_idx])],
+                                                                                        class_string[np.argmax(this_test_prediction)]))
+            plt.axis('off')
+            plt.imshow(model.data_sets.test.x[test_idx].reshape(img_shape))
+            plt.show()
+
+        if remove_type=='posinf':
+            indices_to_remove = predicted_loss_diffs_indices[-num_to_remove:]
+            indices_to_keep = predicted_loss_diffs_indices[:-num_to_remove]
+        elif remove_type=='neginf':
+            indices_to_remove = predicted_loss_diffs_indices[:num_to_remove]
+            indices_to_keep = predicted_loss_diffs_indices[num_to_remove:]
+        else:
+            raise ValueError('remove_type not well specified')
+
+
+        predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+
+
+
 
     actual_loss_diffs = np.zeros([num_to_remove])
 
     # Sanity check
     test_feed_dict = model.fill_feed_dict_with_one_ex(
-        model.data_sets.test,  
-        test_idx)    
+        model.data_sets.test,
+        test_idx)
     test_loss_val, params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
     train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
 
@@ -233,7 +221,7 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
     print('Total loss on training set with original model    : %s' % train_loss_val)
     print('Total loss on training with retrained model   : %s' % retrained_train_loss_val)
     print('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val))
-    
+
 
     # Retraining experiment
     for counter, idx_to_remove in enumerate(indices_to_remove):
@@ -246,7 +234,7 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
         retrained_test_loss_val, retrained_params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
         actual_loss_diffs[counter] = retrained_test_loss_val - test_loss_val
 
-        print('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val)))      
+        print('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val)))
         print('Loss on test idx with original model    : %s' % test_loss_val)
         print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
         print('Difference in loss after retraining     : %s' % actual_loss_diffs[counter])
@@ -254,12 +242,13 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
 
         # Restore params
         model.load_checkpoint(iter_to_load, do_checks=False)
-        
+
 
     np.savez(
-        'output/%s_loss_diffs' % model.model_name, 
-        actual_loss_diffs=actual_loss_diffs, 
+        'output/%s_loss_diffs' % model.model_name,
+        actual_loss_diffs=actual_loss_diffs,
         predicted_loss_diffs=predicted_loss_diffs)
 
     print('Correlation is %s' % pearsonr(actual_loss_diffs, predicted_loss_diffs)[0])
+
     return actual_loss_diffs, predicted_loss_diffs, indices_to_remove
