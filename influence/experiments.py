@@ -4,8 +4,10 @@ import time
 
 import IPython
 from scipy.stats import pearsonr
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
+BASE_DIR='/home/shi144/influence-release/scripts/output'
 def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
     def try_check(idx_to_check, label):
         Y_train_fixed = np.copy(Y_train_flipped)
@@ -150,19 +152,19 @@ def test_retraining(model,
             predicted_loss_diffs_to_display = predicted_loss_diffs[indices_to_display]
             print('Remove type is <%s>, with testing index %s'
                   % (remove_type, test_idx))
-            plt.figure()
+            fig=plt.figure()
             subplot_numbering = 331
             for idx, loss in zip(indices_to_display, predicted_loss_diffs_to_display):
                 img = model.data_sets.train.x[idx].reshape(img_shape)
-                plt.subplot(subplot_numbering)
+                ax=fig.add_subplot(subplot_numbering)
+                ax.imshow(img)
+                ax.axis('off')
                 if class_string is None:
-                    plt.title("class {:d}, inf {:.2f}".format(int(model.data_sets.train.labels[idx]),
+                    ax.set_title("class {:d}, inf {:.2f}".format(int(model.data_sets.train.labels[idx]),
                                                                loss))
                 else:
-                    plt.title("{:s}, inf {:.2f}".format(class_string[int(model.data_sets.train.labels[idx])],
+                    ax.set_title("{:s}, inf {:.2f}".format(class_string[int(model.data_sets.train.labels[idx])],
                                                                loss))
-                plt.axis('off')
-                plt.imshow(img)
                 subplot_numbering += 1
 
 
@@ -171,14 +173,14 @@ def test_retraining(model,
             plt.subplot(subplot_numbering+1)
 
             if class_string is None:
-                plt.title("testing image, true class {:d}, predicted class {:d}".format(int(model.data_sets.test.labels[test_idx]),
+                ax.set_title("testing image, true class {:d}, predicted class {:d}".format(int(model.data_sets.test.labels[test_idx]),
                                                                                       np.argmax(this_test_prediction)))
             else:
-                plt.title("testing image, true class {:s}, predicted class {:s}".format(class_string[int(model.data_sets.test.labels[test_idx])],
+                ax.set_title("testing image, true class {:s}, predicted class {:s}".format(class_string[int(model.data_sets.test.labels[test_idx])],
                                                                                         class_string[np.argmax(this_test_prediction)]))
-            plt.axis('off')
-            plt.imshow(model.data_sets.test.x[test_idx].reshape(img_shape))
-            plt.show()
+            ax.imshow(model.data_sets.test.x[test_idx].reshape(img_shape))
+            ax.axis('off')
+            fig.savefig(os.path.join(BASE_DIR,class_string[int(model.data_sets.test.labels[test_idx])]+str(test_idx)+'.png'))
 
         if remove_type=='posinf':
             indices_to_remove = predicted_loss_diffs_indices[-num_to_remove:]

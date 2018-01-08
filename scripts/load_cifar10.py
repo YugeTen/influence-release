@@ -80,7 +80,7 @@ def load_cifar10(
 
             idx_strings=[]
             labels=[]
-            with open('/home/shi144/Desktop/trainLabels.csv') as csvDataFile:
+            with open(os.path.join(BASE_DIR,'trainLabels.csv')) as csvDataFile:
                 csvReader = csv.reader(csvDataFile)
                 for row in csvReader:
                     idx_strings.append(row[0])

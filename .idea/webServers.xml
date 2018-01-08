@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="54e0bb23-0e2c-4868-889d-e4a560d2d1f4" name="influence" url="http://pear-ev.nexus.csiro.au">
+        <fileTransfer host="pear-ev.nexus.csiro.au" port="22" rootFolder="/home/shi144/influence-release" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
