@@ -117,6 +117,9 @@ def test_retraining(model,
     if dataset=='cifar10':
         class_string = ['airplane', 'automobile', 'bird', 'cat', 'deer',
                    'dog', 'frog', 'horse', 'ship', 'truck']
+    elif dataset=='mnist':
+        class_string = ['0', '1', '2', '3', '4', '5', '6', '7',
+                        '8', '9']
     else:
         class_string = None
 
@@ -161,23 +164,23 @@ def test_retraining(model,
                 ax.axis('off')
                 if class_string is None:
                     ax.set_title("class {:d}, inf {:.2f}".format(int(model.data_sets.train.labels[idx]),
-                                                               loss))
+                                                                 loss))
                 else:
                     ax.set_title("{:s}, inf {:.2f}".format(class_string[int(model.data_sets.train.labels[idx])],
-                                                               loss))
+                                                           loss))
                 subplot_numbering += 1
 
 
             this_test_feed_dict = model.fill_feed_dict_with_one_ex(model.data_sets.test,test_idx)
             this_test_prediction = model.sess.run([model.preds], feed_dict=this_test_feed_dict)
-            plt.subplot(subplot_numbering+1)
 
+            ax = fig.add_subplot(subplot_numbering+1)
             if class_string is None:
                 ax.set_title("testing image, true class {:d}, predicted class {:d}".format(int(model.data_sets.test.labels[test_idx]),
-                                                                                      np.argmax(this_test_prediction)))
+                                                                                           np.argmax(this_test_prediction)))
             else:
                 ax.set_title("testing image, true class {:s}, predicted class {:s}".format(class_string[int(model.data_sets.test.labels[test_idx])],
-                                                                                        class_string[np.argmax(this_test_prediction)]))
+                                                                                           class_string[np.argmax(this_test_prediction)]))
             ax.imshow(model.data_sets.test.x[test_idx].reshape(img_shape))
             ax.axis('off')
             fig.savefig(os.path.join(BASE_DIR,class_string[int(model.data_sets.test.labels[test_idx])]+str(test_idx)+'.png'))
@@ -204,14 +207,14 @@ def test_retraining(model,
         model.data_sets.test,
         test_idx)
     test_loss_val, params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
-    train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
+    #train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
 
     retrain_feed_dict = model.fill_feed_dict_with_some_ex(model.data_sets.train, indices_to_keep)
 
     #model.retrain(num_steps=num_steps, feed_dict=model.all_train_feed_dict)
     model.retrain(num_steps=num_steps, feed_dict=retrain_feed_dict)
     retrained_test_loss_val = sess.run(model.loss_no_reg, feed_dict=test_feed_dict)
-    retrained_train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
+    # retrained_train_loss_val = sess.run(model.total_loss, feed_dict=model.all_train_feed_dict)
     # retrained_train_loss_val = model.minibatch_mean_eval([model.total_loss], model.data_sets.train)[0]
 
     model.load_checkpoint(iter_to_load, do_checks=False)
@@ -219,38 +222,39 @@ def test_retraining(model,
     print('Loss on test idx with original model    : %s' % test_loss_val)
     print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
     print('Difference in test loss after retraining     : %s' % (retrained_test_loss_val - test_loss_val))
-    print('===')
-    print('Total loss on training set with original model    : %s' % train_loss_val)
-    print('Total loss on training with retrained model   : %s' % retrained_train_loss_val)
-    print('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val))
+    # print('===')
+    # print('Total loss on training set with original model    : %s' % train_loss_val)
+    # print('Total loss on training with retrained model   : %s' % retrained_train_loss_val)
+    # print('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val))
 
+###########################################################################################################3
 
     # Retraining experiment
-    for counter, idx_to_remove in enumerate(indices_to_remove):
-
-        print("=== #%s ===" % (counter+1))
-        print('Retraining without train_idx %s (label %s):' % (idx_to_remove, model.data_sets.train.labels[idx_to_remove]))
-
-        train_feed_dict = model.fill_feed_dict_with_all_but_one_ex(model.data_sets.train, idx_to_remove)
-        model.retrain(num_steps=num_steps, feed_dict=train_feed_dict)
-        retrained_test_loss_val, retrained_params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
-        actual_loss_diffs[counter] = retrained_test_loss_val - test_loss_val
-
-        print('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val)))
-        print('Loss on test idx with original model    : %s' % test_loss_val)
-        print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
-        print('Difference in loss after retraining     : %s' % actual_loss_diffs[counter])
-        print('Predicted difference in loss (influence): %s' % predicted_loss_diffs[counter])
-
-        # Restore params
-        model.load_checkpoint(iter_to_load, do_checks=False)
-
-
-    np.savez(
-        'output/%s_loss_diffs' % model.model_name,
-        actual_loss_diffs=actual_loss_diffs,
-        predicted_loss_diffs=predicted_loss_diffs)
-
-    print('Correlation is %s' % pearsonr(actual_loss_diffs, predicted_loss_diffs)[0])
-
+    # for counter, idx_to_remove in enumerate(indices_to_remove):
+    #
+    #     print("=== #%s ===" % (counter+1))
+    #     print('Retraining without train_idx %s (label %s):' % (idx_to_remove, model.data_sets.train.labels[idx_to_remove]))
+    #
+    #     train_feed_dict = model.fill_feed_dict_with_all_but_one_ex(model.data_sets.train, idx_to_remove)
+    #     model.retrain(num_steps=num_steps, feed_dict=train_feed_dict)
+    #     retrained_test_loss_val, retrained_params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
+    #     actual_loss_diffs[counter] = retrained_test_loss_val - test_loss_val
+    #
+    #     print('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val)))
+    #     print('Loss on test idx with original model    : %s' % test_loss_val)
+    #     print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
+    #     print('Difference in loss after retraining     : %s' % actual_loss_diffs[counter])
+    #     print('Predicted difference in loss (influence): %s' % predicted_loss_diffs[counter])
+    #
+    #     # Restore params
+    #     model.load_checkpoint(iter_to_load, do_checks=False)
+    #
+    #
+    # np.savez(
+    #     'output/%s_loss_diffs' % model.model_name,
+    #     actual_loss_diffs=actual_loss_diffs,
+    #     predicted_loss_diffs=predicted_loss_diffs)
+    #
+    # print('Correlation is %s' % pearsonr(actual_loss_diffs, predicted_loss_diffs)[0])
+###########################################################################################################3
     return actual_loss_diffs, predicted_loss_diffs, indices_to_remove

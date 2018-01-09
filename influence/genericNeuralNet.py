@@ -599,7 +599,7 @@ class GenericNeuralNet(object):
 
         num_examples = self.num_train_examples
         if self.mini_batch == True:
-            batch_size = 100
+            batch_size = 128
             assert num_examples % batch_size == 0
         else:
             batch_size = self.num_train_examples
@@ -685,7 +685,7 @@ class GenericNeuralNet(object):
             fhess_p=self.get_fmin_hvp,
             callback=cg_callback,
             avextol=1e-8,
-            maxiter=100) 
+            maxiter=10)
 
         return self.vec_to_list(fmin_results)
 ######################################################################################################

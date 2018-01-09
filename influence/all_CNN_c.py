@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 from sklearn import linear_model, preprocessing, cluster
 import matplotlib.pyplot as plt
-import seaborn as sns
 import scipy.linalg as slin
 import scipy.sparse.linalg as sparselin
 import scipy.sparse as sparse 
@@ -74,7 +73,7 @@ class All_CNN_C(GenericNeuralNet):
                                        conv_patch_size,
                                        input_channels,
                                        output_channels])
-        hidden = tf.nn.tanh(conv2d(input_x, weights_reshaped, stride) + biases)
+        hidden = tf.nn.relu(conv2d(input_x, weights_reshaped, stride) + biases)
 
         return hidden
 
@@ -137,7 +136,8 @@ class All_CNN_C(GenericNeuralNet):
         last_layer_units = 10
         with tf.variable_scope('h3_c'):
             h3_c = self.conv2d_softplus(h3_a, 1, self.hidden3_units, last_layer_units, stride=1)
-        
+
+
         h3_d = tf.reduce_mean(h3_c, axis=[1, 2])
         
         with tf.variable_scope('softmax_linear'):
